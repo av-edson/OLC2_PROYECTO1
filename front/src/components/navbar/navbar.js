@@ -1,5 +1,7 @@
 import React from "react";
 import './nav.css'
+import {Welcome} from '../welcome/welcome'
+import { Editor } from "./editor";
 
 export class NavBar extends React.Component{
 
@@ -37,8 +39,15 @@ export class NavBar extends React.Component{
                   </form>
                 </nav>
             
-              <div>
-                <h2>vista {this.state.noVentana}</h2>
+              <div className="datos">
+                  {this.state.noVentana===1 &&
+                  <Welcome></Welcome>
+                  }
+                  {this.state.noVentana===3 &&
+                    <h2>No coma ansias hdp!</h2>
+                  }
+                  {this.state.noVentana===2 &&
+                  <Editor></Editor>}
               </div>
             </div>
         );

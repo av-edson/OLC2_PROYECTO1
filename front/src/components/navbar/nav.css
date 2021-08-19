@@ -4,3 +4,24 @@ button{
 .barra{
     min-height: 600px;
 }
+
+.datos{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.todo{
+    text-align: center;
+}
+.editor{
+    padding: 10px;
+    margin: 10px;
+  
+  /* IMPORTANTE */
+  display: inline-block;
+  min-width: 600px;
+  max-width: 700px;
+  height: 500px;
+  text-align: left;
+}
