@@ -2,6 +2,7 @@ import React from "react";
 import './nav.css'
 import {Welcome} from '../welcome/welcome'
 import { Editor } from "./editor";
+import { Resports } from "./reportes";
 
 export class NavBar extends React.Component{
 
@@ -44,7 +45,7 @@ export class NavBar extends React.Component{
                   <Welcome></Welcome>
                   }
                   {this.state.noVentana===3 &&
-                    <h2>No coma ansias hdp!</h2>
+                    <Resports></Resports>
                   }
                   {this.state.noVentana===2 &&
                   <Editor></Editor>}
