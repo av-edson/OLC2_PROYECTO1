@@ -1,6 +1,7 @@
 from clases.expresiones.exprBinaria import *
 from clases.expresiones.expresionLiteral import ExpresionLiteral
 from clases.expresiones.exprNativa import *
+from clases.expresiones.exprRelacional import *
 from analizadores.lexer import *
 from clases.abstract.type import Type
 from clases.expresiones import *
@@ -70,7 +71,7 @@ def p_expresion_funcion_nativa(t):
         t[0]=ExpresionNativa(OpeNativas.COS,t[3],t.lineno(1),t.lexpos(1))
     elif t.slice[1].type=="FTAN":
         t[0]=ExpresionNativa(OpeNativas.TAN,t[3],t.lineno(1),t.lexpos(1))
-    elif t.slice[1].type=="FSQRT":
+    else:
         t[0]=ExpresionNativa(OpeNativas.RAIZ,t[3],t.lineno(1),t.lexpos(1))
 
 def p_expresion_binaria(t):
@@ -92,6 +93,26 @@ def p_expresion_binaria(t):
         t[0]=ExpresionBinaria(OperacionesBinarias.POTENCIA,t[1],t[3],t.lineno(2),t.lexpos(2))
     else:
         t[0]=ExpresionBinaria(OperacionesBinarias.MODULO,t[1],t[3],t.lineno(2),t.lexpos(2))
+
+def p_expresion_relacional(t):
+    '''expresion    :   expresion MAYOR expresion
+                    |   expresion MENOR expresion
+                    |   expresion MAYOR_IGUAL expresion
+                    |   expresion MENOR_IGUAL expresion
+                    |   expresion IGUAL_IGUAL expresion
+                    |   expresion DIFERENTE expresion'''
+    if t.slice[2].type=="MAYOR":
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.MAYORQUE,t.lineno(2),t.lexpos(2))
+    elif t.slice[2].type=="MENOR":
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.MENORQUE,t.lineno(2),t.lexpos(2))
+    elif t.slice[2].type=="MAYOR_IGUAL":
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.MAYORIGUAL,t.lineno(2),t.lexpos(2))
+    elif t.slice[2].type=="MENOR_IGUAL":
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.MENORIGUAL,t.lineno(2),t.lexpos(2))
+    elif t.slice[2].type=="IGUAL_IGUAL":
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.IGUALIGUAL,t.lineno(2),t.lexpos(2))
+    else:
+        t[0]=ExpresionRelacional(t[1],t[3],OpRelacional.DIFERENTE,t.lineno(2),t.lexpos(2))
 
 def p_final_expresion(t):
     '''final_expresion  :   PARENTESIS_IZQ expresion PARENTESIS_DER

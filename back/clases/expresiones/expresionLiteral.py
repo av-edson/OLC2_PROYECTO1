@@ -10,4 +10,5 @@ class ExpresionLiteral(Expresion):
         self.valor=valorDato
     
     def ejecutar(self, enviroment):
+        # falta verificar si es variable y recuperarla
         return Return(self.valor,self.tipo)

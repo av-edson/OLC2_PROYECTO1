@@ -2,6 +2,7 @@ from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
 from enum import Enum
+import math
 
 class OpeNativas(Enum):
     LOGCOMUN=0
@@ -45,7 +46,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = float(valorExpre)
+            regreso.value = math.log10(float(valorExpre))
             regreso.tipo=Type.FLOAT
         except:
             return regreso
@@ -58,7 +59,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = float(valorExpre)+base.value
+            regreso.value = math.log(float(valorExpre),base.value)
         except:
             return regreso
         regreso.tipo=Type.FLOAT
@@ -69,7 +70,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = float(valorExpre)
+            regreso.value = math.sin(float(valorExpre))
         except:
             return regreso
         regreso.tipo=Type.FLOAT
@@ -80,7 +81,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = float(valorExpre)
+            regreso.value = math.cos(float(valorExpre))
         except:
             return regreso
         regreso.tipo=Type.FLOAT
@@ -91,7 +92,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = float(valorExpre)
+            regreso.value = math.tan(float(valorExpre))
         except:
             return regreso
         regreso.tipo=Type.FLOAT
@@ -102,7 +103,7 @@ class ExpresionNativa(Expresion):
         valorExpre = expre.value
         regreso = Return()
         try:
-            regreso.value = pow(valorExpre,1/2)
+            regreso.value = math.sqrt(float(valorExpre))
         except:
             return regreso
         regreso.tipo=Type.FLOAT
