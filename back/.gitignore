@@ -1,0 +1,9 @@
+/__pycache__
+/analizadores/__pycache__
+/ply
+/analizadores/parser.out
+/analizadores/auxi.py
+/analizadores/parsetab.py
+/clases/enviroment/__pycache__
+/clases/abstract/__pycache__
+/clases/expresiones/__pycache__
