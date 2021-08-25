@@ -3,7 +3,6 @@ from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
 from enum import Enum
-import traceback
 
 class OperacionesBinarias(Enum):
     SUMA=0
@@ -41,7 +40,7 @@ class ExpresionBinaria(Expresion):
             else:
                 return Return()
         except Exception:
-            traceback.print_exc()
+            print("--------Error en la operacion binaria------")
         
         return regreso
 
@@ -79,14 +78,17 @@ class ExpresionBinaria(Expresion):
             regreso.tipo=Type.INT
         return regreso
     def multiplicacion(self,iz,der):
-        if not(iz.tipo==Type.INT or iz.tipo==Type.FLOAT):
+        if not(iz.tipo==Type.INT or iz.tipo==Type.FLOAT or iz.tipo==Type.STRING):
             return Return(0,Type.UNDEFINED)
-        if not(der.tipo==Type.INT or der.tipo==Type.FLOAT):
+        if not(der.tipo==Type.INT or der.tipo==Type.FLOAT or iz.tipo==Type.STRING):
             return Return(0,Type.UNDEFINED)
         regreso = Return()
         if iz.tipo == Type.FLOAT or der.tipo == Type.FLOAT:
             regreso.value = float(iz.value) * float(der.value)
             regreso.tipo=Type.FLOAT
+        elif iz.tipo==Type.STRING or der.tipo==Type.STRING:
+            regreso.value = str(iz.value)+str(der.value)
+            regreso.tipo=Type.STRING
         else:
             regreso.value = iz.value*der.value
             regreso.tipo=Type.INT

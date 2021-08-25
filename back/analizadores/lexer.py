@@ -51,7 +51,8 @@ tokens = [
     'CARACTER',
     # otros
     'IGUAL',
-    'PUNTOCOMA'
+    'PUNTOCOMA',
+    'COMA',
 ] + list(reservadas.values())
 
 # Tokens
@@ -79,6 +80,7 @@ t_LAND = r'&&'
 t_LNOT = r'!'
 t_IGUAL = r'\='
 t_PUNTOCOMA = r'\;'
+t_COMA = r'\,'
 
 
 #decimal
