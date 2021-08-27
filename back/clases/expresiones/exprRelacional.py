@@ -1,4 +1,3 @@
-from clases.expresiones.exprNativa import ExpresionNativa
 from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
@@ -145,4 +144,56 @@ class ExpresionRelacional(Expresion):
         regreso.tipo=Type.BOOL
         return regreso
 
-    
+
+class OpeLogica(Enum):
+    OR=0
+    AND=2
+    NOT=3
+
+class ExpresionLogica(Expresion):
+    def __init__(self,izquierdo,derecho,tipo, line, column):
+        Expresion.__init__(self,line, column)
+        self.izquierdo=izquierdo
+        self.derecho=derecho
+        self.tipo=tipo
+
+    def ejecutar(self, enviroment):
+        izq=self.izquierdo.ejecutar(enviroment)
+        if self.tipo!=OpeLogica.NOT:
+            der=self.derecho.ejecutar(enviroment)
+        else:
+            if not(izq.tipo==Type.BOOL):
+                return Return()
+            else:
+                return self.operacion_not(izq)
+
+        if not(izq.tipo==Type.BOOL) or not(der.tipo==Type.BOOL):
+            return Return()
+        if self.tipo==OpeLogica.OR:
+            return self.operacion_or(izq,der)
+        elif self.tipo==OpeLogica.AND:
+            return self.operacion_and(izq,der)
+            
+
+    def operacion_or(self,izq,der):
+        regreso = Return()
+        if bool(izq.value)==True or bool(der.value)==True:
+            regreso.value=True
+        else:
+            regreso.value=False
+        regreso.tipo=Type.BOOL
+        return regreso  
+    def operacion_and(self,izq,der):
+        regreso = Return()
+        if bool(izq.value)==True and bool(der.value)==True:
+            regreso.value=True
+        else:
+            regreso.value=False
+        regreso.tipo=Type.BOOL  
+        return regreso 
+    def operacion_not(self,izq):
+        regreso = Return()
+        val=bool(izq.value)
+        regreso.value = not(val)
+        regreso.tipo=Type.BOOL
+        return regreso      

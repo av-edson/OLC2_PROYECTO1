@@ -1,6 +1,6 @@
-from clases.enviroment.simbolo import Simbolo
+#from clases.enviroment.simbolo import Simbolo
 from clases.abstract.expresion import Expresion
-from clases.enviroment.enviroment import Enviroment
+#from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
 
 class ExpresionLiteral(Expresion):

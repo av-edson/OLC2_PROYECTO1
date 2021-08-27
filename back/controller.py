@@ -10,6 +10,7 @@ ast = parser.parse(contenido)
 gl = Enviroment(None)
 try:
     for instruccion in ast:
+        #instruccion.ejecutar(gl)
         s=instruccion.ejecutar(gl)
         print(str(s.tipo)+" --- "+str(s.value))
 except:

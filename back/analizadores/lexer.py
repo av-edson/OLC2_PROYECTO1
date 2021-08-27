@@ -10,9 +10,18 @@ reservadas = {
     'bool':'DBOOL',
     'char':'DCHAR',
     'string':'DSTRING',
-    'nulo':'NULO',
+    'nothing':'NULO',
     'true':'BOOLEANO',
     'false':'BOOLEANO',
+    'print':'IMPRIMIR',
+    'println':'IMPRIMIR_ML',
+    'parse':'FPARSE',
+    'trunc':'FTRUNC',
+    'float':'FFLOAT',
+    'typeof':'FTYPEOF',
+    'push':'FPUSH',
+    'pop':'FPOP',
+    'length':'FLENGTH',
 }
 
 tokens = [
