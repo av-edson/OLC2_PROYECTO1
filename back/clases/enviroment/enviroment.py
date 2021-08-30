@@ -1,10 +1,11 @@
 from clases.enviroment.simbolo import *
 
 class Enviroment:
-    def __init__(self,antecesor):
+    def __init__(self,antecesor,nombre):
         self.antecesor = antecesor
         self.variables = {}
         self.funciones = {}
+        self.nombre = nombre
 
     def getGlobal(self):
         entorno = self

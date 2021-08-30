@@ -17,17 +17,21 @@ class LLamadaFuncion(Expresion):
         env:Enviroment = enviroment
         func:Funcion = env.get_fuction(self.ide)
         if func != None:
-            entornoInterno =  Enviroment(env)
+            entornoInterno =  Enviroment(env,"funcion_"+str(self.ide))
             if self.validarFuncion(func,enviroment):
                 # declarando las variables en el entorno
                 if self.lista != None:
                     for i in range(len(self.lista)):
                         p:Parametro = func.params[i]
                         e:Return = self.listaDatosExpresiones[i]
-                        entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,3)
+                        # referencia de listas y structs
+                        if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
+                            entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,3)
                 # ejecutando las instrucciones de la funcion
                 bloque:BloqueInstrucciones = func.instrucciones
-                bloque.ejecutar(entornoInterno)
+                tieneReturn=bloque.ejecutar(entornoInterno)
+                if tieneReturn !=None:
+                    return tieneReturn
                 #print('espero todo haya salido bien xd')
             else:
                 return Return()

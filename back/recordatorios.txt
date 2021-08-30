@@ -2,5 +2,4 @@
 
 falta:
     funcion lengt
-    funcion lowercase
-    funcion uppercase
+    valor por referencia en funciones

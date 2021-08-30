@@ -28,6 +28,7 @@ reservadas = {
     'global':'VGLOBAL',
     'function':'FUNCION',
     'end':'FIN',
+    'return':'RETURNST',
 }
 
 tokens = [

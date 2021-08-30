@@ -9,6 +9,7 @@ from clases.tree.funcionesNativas import *
 from clases.tree.declaracion import *
 from clases.tree.bloqueInstrucciones import BloqueInstrucciones
 from clases.tree.funciones.parametro import *
+from clases.tree.funciones.returnST import ReturnFunc
 from clases.abstract.type import Type
 from clases.tree.funciones.llamadaFunc import LLamadaFuncion
 from clases.expresiones import *
@@ -39,7 +40,8 @@ def p_instruccion(t):
     '''instruccion  :   declaracion PUNTOCOMA
                     |   imprimir PUNTOCOMA
                     |   declaracion_funcion PUNTOCOMA
-                    |   llamada_funcion PUNTOCOMA'''
+                    |   llamada_funcion PUNTOCOMA
+                    |   funcion_return  PUNTOCOMA'''
     t[0]=t[1]
 #def p_declaracion(t):
 #    '''declaracion :    DINT64 ID
@@ -272,7 +274,14 @@ def p_llamada_funcion(t):
     if len(t)==4:
         t[0] = LLamadaFuncion(t[1],[],t.lineno(1), t.lexpos(1))
     else:
-        t[0] = LLamadaFuncion(t[1],t[3],t.lineno(1), t.lexpos(1))
+        t[0] = LLamadaFuncion(t[1],t[3],t.lineno(1), t.lexpos(1)) 
+def p_funcion_return(t):
+    '''funcion_return   :   RETURNST expresion
+                        |   RETURNST'''
+    if len(t)==2:
+        t[0]=ReturnFunc(None,t.lineno(1), t.lexpos(1))
+    else:
+        t[0]=ReturnFunc(t[2],t.lineno(1), t.lexpos(1))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)

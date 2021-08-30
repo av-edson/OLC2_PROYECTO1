@@ -8,7 +8,7 @@ def analizarEntrada(contenido):
 f = open('entrada.txt')
 contenido = f.read()
 ast = parser.parse(contenido)
-gl = Enviroment(None)
+gl = Enviroment(None,"Global")
 try:
     for instruccion in ast:
         instruccion.ejecutar(gl)

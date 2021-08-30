@@ -9,3 +9,5 @@ class BloqueInstrucciones(Instruccion):
     def ejecutar(self, enviroment):
         for instruccion in self.listaInstrucciones:
             regreso = instruccion.ejecutar(enviroment)
+            if regreso != None:
+                return regreso

@@ -13,6 +13,7 @@ class Type(Enum):
     RETURNST=8
     BREACKST=9
     CONTINUEST=10
+    STRUCT=11
     
 class Return:
     def __init__(self,value=0,tipo=Type.UNDEFINED):
