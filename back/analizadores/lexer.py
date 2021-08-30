@@ -5,12 +5,14 @@ reservadas = {
     'cos':'FCOS',
     'tan':'FTAN',
     'sqrt':'FSQRT',
-    'int64':'DINT64',
-    'float64':'DFLOAT64',
-    'bool':'DBOOL',
-    'char':'DCHAR',
-    'string':'DSTRING',
-    'nothing':'NULO',
+    'uppercase':'UPERCASE',
+    'lowercase':'LOWERCASE',
+    'Int64':'DINT64',
+    'Float64':'DFLOAT64',
+    'Bool':'DBOOL',
+    'Char':'DCHAR',
+    'String':'DSTRING',
+    'Nulo':'NULO',
     'true':'BOOLEANO',
     'false':'BOOLEANO',
     'print':'IMPRIMIR',
@@ -22,6 +24,10 @@ reservadas = {
     'push':'FPUSH',
     'pop':'FPOP',
     'length':'FLENGTH',
+    'local':'LOCAL',
+    'global':'VGLOBAL',
+    'function':'FUNCION',
+    'end':'FIN',
 }
 
 tokens = [
@@ -62,6 +68,7 @@ tokens = [
     'IGUAL',
     'PUNTOCOMA',
     'COMA',
+    'DOSPUNTOS',
 ] + list(reservadas.values())
 
 # Tokens
@@ -90,6 +97,7 @@ t_LNOT = r'!'
 t_IGUAL = r'\='
 t_PUNTOCOMA = r'\;'
 t_COMA = r'\,'
+t_DOSPUNTOS = r'\:'
 
 
 #decimal

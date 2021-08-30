@@ -11,6 +11,8 @@ class OpeNativas(Enum):
     COS=3
     TAN=4
     RAIZ=5
+    UPER=6
+    LOWER=7
 
 class ExpresionNativa(Expresion):
     def __init__(self,tipo,content, line, column,base=None):
@@ -36,6 +38,10 @@ class ExpresionNativa(Expresion):
                 return self.tangente(expre)
             elif self.tipo==OpeNativas.RAIZ:
                 return self.raiz(expre)
+            elif self.tipo==OpeNativas.UPER:
+                return self.uper(expre)
+            else:
+                return self.lower(expre)
         except:
             print('----Error al ejecutar funcion nativa')
             return Return()
@@ -108,4 +114,15 @@ class ExpresionNativa(Expresion):
             return regreso
         regreso.tipo=Type.FLOAT
         return regreso
-
+    def uper(self,expre:Return):
+        if not(expre.tipo==Type.STRING or expre.tipo==Type.CHAR):
+            print('upper solo de cadenas o caracteres')
+            return Return()
+        nuevoValor = str(expre.value).upper()
+        return Return(nuevoValor,Type.STRING)
+    def lower(self,expre):
+        if not(expre.tipo==Type.STRING or expre.tipo==Type.CHAR):
+            print('lower solo de cadenas o caracteres')
+            return Return()
+        nuevoValor = str(expre.value).lower()
+        return Return(nuevoValor,Type.STRING)

@@ -3,6 +3,7 @@ from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
 from enum import Enum
+import re
 
 class OperacionesBinarias(Enum):
     SUMA=0
@@ -106,8 +107,15 @@ class ExpresionBinaria(Expresion):
             regreso.value = float(iz.value) / float(der.value)
             regreso.tipo=Type.FLOAT
         else:
-            regreso.value = iz.value/der.value
-            regreso.tipo=Type.INT
+            v = iz.value/der.value
+            formato = re.compile(r'^\-?[1-9][0-9]*$')
+            if re.match(formato,str(v)):
+                v = int(v)
+                regreso.value = v
+                regreso.tipo=Type.INT
+            else:
+                regreso.value = v
+                regreso.tipo=Type.FLOAT
         return regreso
     def potencia(self,iz,der):
         if not(iz.tipo==Type.INT or iz.tipo==Type.FLOAT or iz.tipo==Type.STRING):

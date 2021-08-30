@@ -3,13 +3,15 @@ from clases.abstract.expresion import Expresion
 from clases.abstract.type import *
 from math import floor
 class FSimple(Expresion):
-    # tipo de funcines en esta
-    # 1 = float
-    # 2 = string
-    # 3 = typeof
-    # 4 = trunc
-    # 5 = parseInt
-    # 6 = parseFloat
+    '''
+    # tipo de funcines en esta\n
+    # 1 = float\n
+    # 2 = string\n
+    # 3 = typeof\n
+    # 4 = trunc\n
+    # 5 = parseInt\n
+    # 6 = parseFloat\n
+    '''
 
     def __init__(self,expr,tipo, line, column):
         self.line=line

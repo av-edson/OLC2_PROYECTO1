@@ -1,0 +1,6 @@
+        NO PUEDE TERMINAR EL ARCHIVO EN COMENTARIO
+
+falta:
+    funcion lengt
+    funcion lowercase
+    funcion uppercase
