@@ -31,7 +31,7 @@ class SentenciaIF(Instruccion):
         elif self.elseST != None:
             bloque:BloqueInstrucciones = self.elseST
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaELSE lin_"+str(self.line))
-            e=bloque.ejecutar(enviroment)
+            e=bloque.ejecutar(entornoInterno)
             if e !=None:
                 return e
         

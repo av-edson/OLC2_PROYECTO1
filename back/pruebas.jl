@@ -29,20 +29,39 @@
 #end;
 #println(factorial(5));
 
-function ackerman(m::Int64,n::Int64)
-    if( (n<0) || (m<0) )
-        println("Parametros no validos");
+# function ackerman(m::Int64,n::Int64)
+#     if( (n<0) || (m<0) )
+#         println("Parametros no validos");
+#     end;
+#     if(m==0)
+#         return (n+1);
+#     end;
+#     if(n==0)
+#         a = ackerman(m-1,1)
+#         return a;
+#     end;
+#     b = ackerman(m-1,ackerman(m,n-1));
+#     return b;
+# end;
+# 
+# a=ackerman(2,4);
+# print(a);
+
+var1 = 0;
+
+function esmenor(n::Int64)
+    if n < 10
+        return true;
+    else
+        return false;
     end;
-    if(m==0)
-        return (n+1);
-    end;
-    if(n==0)
-        a = ackerman(m-1,1)
-        return a;
-    end;
-    b = ackerman(m-1,ackerman(m,n-1));
-    return b;
 end;
 
-a=ackerman(2,4);
-print(a);
+while esmenor(var1)
+    global var1;
+    println(var1);
+    var1 = var1 + 1;
+    if var1 > 4
+        continue;
+    end;
+end;

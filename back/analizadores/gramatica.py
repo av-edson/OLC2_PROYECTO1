@@ -14,6 +14,8 @@ from clases.abstract.type import Type
 from clases.tree.funciones.llamadaFunc import LLamadaFuncion
 from clases.tree.control.sentenciaELIF import SentenciaELIF
 from clases.tree.control.sentenciaIF import SentenciaIF
+from clases.tree.ciclos.cicloWhile import CicloWhile
+from clases.tree.ciclos.cicloFor import CicloFor
 from clases.expresiones import *
 #------------------ SINTACTICO ---------------------------
 precedence = (
@@ -44,7 +46,8 @@ def p_instruccion(t):
                     |   declaracion_funcion PUNTOCOMA
                     |   llamada_funcion PUNTOCOMA
                     |   funcion_return  PUNTOCOMA
-                    |   sentencia_control'''
+                    |   sentencia_control
+                    |   salto_control PUNTOCOMA'''
     t[0]=t[1]
 
 def p_bloque_instrucciones(t):
@@ -248,7 +251,7 @@ def p_lista_expresiones_expresion(t):
 def p_declaracion_funcion(t):
     '''declaracion_funcion  :   FUNCION ID PARENTESIS_IZQ params_function PARENTESIS_DER bloque_instrucciones FIN
                             |   FUNCION ID PARENTESIS_IZQ PARENTESIS_DER bloque_instrucciones FIN''' 
-    if len(t)==6:
+    if len(t)==7:
         t[0] = Funcion(t[2],t[5],[],t.lineno(1), t.lexpos(1))
     else:
         t[0] = Funcion(t[2],t[6],t[4],t.lineno(1), t.lexpos(1))
@@ -285,7 +288,9 @@ def p_funcion_return(t):
         t[0]=ReturnFunc(t[2],t.lineno(1), t.lexpos(1))
 
 def p_sentencias_control(t):
-    '''sentencia_control    :   sentencia_if PUNTOCOMA'''
+    '''sentencia_control    :   sentencia_if PUNTOCOMA
+                            |   sentencia_while PUNTOCOMA
+                            |   sentencia_for   PUNTOCOMA'''
     t[0]=t[1]
 
 # sin elif, con o sin else
@@ -316,6 +321,26 @@ def p_lista_elif(t):
 def p_solo_elif(t):
     '''elif_solo    :   ELIFST expresion bloque_instrucciones'''
     t[0]=SentenciaELIF(t[2],t[3],t.lineno(1), t.lexpos(1))
+
+def p_sentencia_while(t):
+    '''sentencia_while  :   WHILEST expresion bloque_instrucciones FIN'''
+    t[0] = CicloWhile(t[2],t[3],t.lineno(1), t.lexpos(1))
+
+def p_salto_control(t):
+    '''salto_control :   CONTINUEST
+                    |   BREACKST'''
+    if t.slice[1].type=="CONTINUEST":
+            t[0] = ExpresionLiteral(Type.CONTINUEST,str(t[1]),t.lineno(1),t.lexpos(0))
+    elif t.slice[1].type=="BREACKST":
+        t[0] = ExpresionLiteral(Type.BREACKST,str(t[1]),t.lineno(1),t.lexpos(0))
+
+def p_sentencia_for(t):
+    '''sentencia_for    :   FORST ID EIN expresion DOSPUNTOS expresion bloque_instrucciones FIN
+                        |   FORST ID EIN expresion bloque_instrucciones FIN'''
+    if len(t)==9:
+        t[0]=CicloFor(t[2],t[4],t[7],t.lineno(1), t.lexpos(1),t[6])
+    else:
+        t[0]=CicloFor(t[2],t[4],t[5],t.lineno(1), t.lexpos(1))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)

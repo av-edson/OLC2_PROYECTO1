@@ -3,3 +3,14 @@
 falta:
     funcion lengt
     valor por referencia en funciones
+
+
+WARNING: Token 'COMENTARIOMULTIPLE' defined, but not used
+WARNING: Token 'COMENTARIOSIMPLE' defined, but not used
+WARNING: Token 'CORCHETE_DER' defined, but not used
+WARNING: Token 'CORCHETE_IZQ' defined, but not used
+WARNING: Token 'FLENGTH' defined, but not used
+WARNING: Token 'FPOP' defined, but not used
+WARNING: Token 'FPUSH' defined, but not used
+WARNING: Token 'LLAVE_ABRE' defined, but not used
+WARNING: Token 'LLAVE_CIERRA' defined, but not used

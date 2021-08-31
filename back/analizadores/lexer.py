@@ -32,6 +32,11 @@ reservadas = {
     'if':'IFST',
     'else':'ELSEST',
     'elseif':'ELIFST',
+    'while':'WHILEST',
+    'continue':'CONTINUEST',
+    'break':'BREACKST',
+    'for':'FORST',
+    'in':'EIN'
 }
 
 tokens = [

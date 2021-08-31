@@ -1,17 +1,8 @@
-function par(n)
-    if n == 0
-        println("es par");
-    else
-        impar(n-1);
-    end;
+function get()
+    return trunc(Int64, 3.99999) ;
 end;
 
-function impar(n)
-    if n == 0
-        println("es impar");
-    else
-        par(n-1);
-    end;
-end;
-
-par(101);
+for i in (2-5):get()               # Recorre rango de 1:4
+    print(i, " ");          # Únicamente se recorre ascendentemente
+end;    
+println("");
