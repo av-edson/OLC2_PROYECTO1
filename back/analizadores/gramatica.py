@@ -12,6 +12,8 @@ from clases.tree.funciones.parametro import *
 from clases.tree.funciones.returnST import ReturnFunc
 from clases.abstract.type import Type
 from clases.tree.funciones.llamadaFunc import LLamadaFuncion
+from clases.tree.control.sentenciaELIF import SentenciaELIF
+from clases.tree.control.sentenciaIF import SentenciaIF
 from clases.expresiones import *
 #------------------ SINTACTICO ---------------------------
 precedence = (
@@ -41,16 +43,12 @@ def p_instruccion(t):
                     |   imprimir PUNTOCOMA
                     |   declaracion_funcion PUNTOCOMA
                     |   llamada_funcion PUNTOCOMA
-                    |   funcion_return  PUNTOCOMA'''
+                    |   funcion_return  PUNTOCOMA
+                    |   sentencia_control'''
     t[0]=t[1]
-#def p_declaracion(t):
-#    '''declaracion :    DINT64 ID
-#                    |   DFLOAT64 ID
-#                    |   DBOOL ID
-#                    |   DSTRING ID
-#                    |   DCHAR ID'''
+
 def p_bloque_instrucciones(t):
-    '''bloque_instrucciones :   instrucciones FIN'''
+    '''bloque_instrucciones :   instrucciones'''
     t[0] = BloqueInstrucciones(t[1],t.lineno(1),t.lexpos(0))
 def p_declaracion(t):
     '''declaracion   :  ID IGUAL expresion  
@@ -197,7 +195,10 @@ def p_final_expresion(t):
         elif t.slice[1].type=="CARACTER":
             t[0] = ExpresionLiteral(Type.CHAR,str(t[1]),t.lineno(1),t.lexpos(0))
         elif t.slice[1].type=="BOOLEANO":
-            t[0] = ExpresionLiteral(Type.BOOL,str(t[1]),t.lineno(1),t.lexpos(0))
+            if str(t[1])=="true":
+                t[0] = ExpresionLiteral(Type.BOOL,True,t.lineno(1),t.lexpos(0))
+            else:
+                t[0] = ExpresionLiteral(Type.BOOL,False,t.lineno(1),t.lexpos(0))
         elif t.slice[1].type=="NULO":
             t[0] = ExpresionLiteral(Type.NULO,str(t[1]),t.lineno(1),t.lexpos(0))
         elif t.slice[1].type=="ID":
@@ -245,8 +246,8 @@ def p_lista_expresiones_expresion(t):
     t[0] = [t[1]]
 
 def p_declaracion_funcion(t):
-    '''declaracion_funcion  :   FUNCION ID PARENTESIS_IZQ params_function PARENTESIS_DER bloque_instrucciones
-                            |   FUNCION ID PARENTESIS_IZQ PARENTESIS_DER bloque_instrucciones''' 
+    '''declaracion_funcion  :   FUNCION ID PARENTESIS_IZQ params_function PARENTESIS_DER bloque_instrucciones FIN
+                            |   FUNCION ID PARENTESIS_IZQ PARENTESIS_DER bloque_instrucciones FIN''' 
     if len(t)==6:
         t[0] = Funcion(t[2],t[5],[],t.lineno(1), t.lexpos(1))
     else:
@@ -282,6 +283,39 @@ def p_funcion_return(t):
         t[0]=ReturnFunc(None,t.lineno(1), t.lexpos(1))
     else:
         t[0]=ReturnFunc(t[2],t.lineno(1), t.lexpos(1))
+
+def p_sentencias_control(t):
+    '''sentencia_control    :   sentencia_if PUNTOCOMA'''
+    t[0]=t[1]
+
+# sin elif, con o sin else
+def p_sentencia_if(t):
+    '''sentencia_if :   IFST expresion bloque_instrucciones FIN
+                    |   IFST expresion bloque_instrucciones sentencia_else FIN
+                    |   IFST expresion bloque_instrucciones elif_lista FIN
+                    |   IFST expresion bloque_instrucciones elif_lista sentencia_else FIN'''
+    if len(t)==5:
+        t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1))
+    elif len(t)==6:
+        t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),None,t[4])
+    elif len(t)==7:
+        t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),t[4],t[5])
+
+def p_sentencia_else(t):
+    '''sentencia_else   :   ELSEST bloque_instrucciones'''
+    t[0]=t[2]
+
+def p_lista_elif(t):
+    '''elif_lista   :   elif_lista elif_solo
+                    |   elif_solo'''
+    if len(t)==3:
+        t[1].append(t[2])
+        t[0]=t[1]
+    else:
+        t[0]=[t[1]]
+def p_solo_elif(t):
+    '''elif_solo    :   ELIFST expresion bloque_instrucciones'''
+    t[0]=SentenciaELIF(t[2],t[3],t.lineno(1), t.lexpos(1))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)

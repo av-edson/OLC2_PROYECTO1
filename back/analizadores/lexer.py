@@ -29,6 +29,9 @@ reservadas = {
     'function':'FUNCION',
     'end':'FIN',
     'return':'RETURNST',
+    'if':'IFST',
+    'else':'ELSEST',
+    'elseif':'ELIFST',
 }
 
 tokens = [
