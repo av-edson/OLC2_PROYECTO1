@@ -1,32 +1,48 @@
-println("Probando expresiones Arítmeticas");
+# function rec_fib(n)
+#     if n > 1
+#         return rec_fib(n-1) + rec_fib(n-2);
+#     else
+#         return n;
+#     end;
+# end;
+# println(rec_fib(10));
 
-println(-25^(69-33*2)+22-32*2-33^(-48+48));   # -15668
-println(-93.555+92.12-81.33+19+26-68+-7/(79+11)/86);    # -105.76590439276485
-println(8+67+74-1.0^((-86+22)*2)-5^6);  # -15477.0
-println((51 % 49) * (9.9+90.1));    # 200.0
-println(0+9*3*(85%(46+95)));    # 2295
+# function cuenta_regresiva(numero)
+#     numero =numero- 1
+#     if numero > 0
+#         println(numero);
+#         cuenta_regresiva(numero);
+#     else
+#         println("Boooooooom!");
+#     end;
+#     println("Fin de la función", numero);
+# end;
+# cuenta_regresiva(5);
 
-println("Probando expresiones Booleanas y Lógicas");
+#function factorial(numero)
+#    println("Valor inicial ->",numero);
+#    if numero > 1
+#        numero = numero * factorial(numero -1);
+#    end;
+#    println("valor final ->",numero);
+#    return numero;
+#end;
+#println(factorial(5));
 
-println(56 < 48 && 68 >=12 && 62 != 96);    # false
-println((21.0==20.5||95>=94)&&((19<39&&83<=96)||35<97));    # true
-println((68==33||(2<95&&17==37))&&63<=9||12<=42||25==1);    # true
-
-println("Probando expresiones Arítmeticas, Booleanas y Lógicas");
-if ((1 == 1 && 0 != 0) || 1 == 0)
-    println("No entra acá");
-else
-    println("Entra acá");
+function ackerman(m::Int64,n::Int64)
+    if( (n<0) || (m<0) )
+        println("Parametros no validos");
+    end;
+    if(m==0)
+        return (n+1);
+    end;
+    if(n==0)
+        a = ackerman(m-1,1)
+        return a;
+    end;
+    b = ackerman(m-1,ackerman(m,n-1));
+    return b;
 end;
 
-if (1 == (1 + 1 - (1 * 2 / 2)) && 20.5 == 20.5)
-    println("Entra acá");
-else
-    println("No entra acá");
-end;
-
-if "Hola" == "Mundo"
-    println("No entra acá");
-else
-    println("Entra acá");
-end;
+a=ackerman(2,4);
+print(a);

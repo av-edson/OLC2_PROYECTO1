@@ -23,10 +23,12 @@ class LLamadaFuncion(Expresion):
                 if self.lista != None:
                     for i in range(len(self.lista)):
                         p:Parametro = func.params[i]
-                        e:Return = self.listaDatosExpresiones[i]
+                        e:Return = self.listaDatosExpresiones[i] 
                         # referencia de listas y structs
                         if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
-                            entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,3)
+                            if p.tipoDato == None:
+                                p.tipoDato = e.tipo
+                            entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2)
                 # ejecutando las instrucciones de la funcion
                 bloque:BloqueInstrucciones = func.instrucciones
                 tieneReturn=bloque.ejecutar(entornoInterno)
@@ -40,13 +42,15 @@ class LLamadaFuncion(Expresion):
             return Return()
 
     def validarFuncion(self,func:Funcion,enviroment):
+        self.listaDatosExpresiones=[]
         for expre in self.lista:
             val:Return = expre.ejecutar(enviroment)
             # si una expresion tiene error se sale del programa
             if val.tipo == Type.UNDEFINED:
                 print('Una expresion que envio como parametro contiene error en la funcion')
                 return False
-            self.listaDatosExpresiones.append(val)
+            else:
+                self.listaDatosExpresiones.append(val)
             # viendo que coincidan los datos de expresiones con los parametros
         if len(func.params) != len(self.listaDatosExpresiones):
             # si tienen numero diferente de parametros

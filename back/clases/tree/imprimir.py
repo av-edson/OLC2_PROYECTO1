@@ -35,5 +35,7 @@ class Imprimir(Instruccion):
         print(res, end="")
 
     def imprimir_ml(self,lista):
+        aux = ""
         for res in lista:
-            print(res.value)
+            aux+=str(res.value)
+        print(aux)

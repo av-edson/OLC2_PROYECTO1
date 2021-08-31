@@ -20,14 +20,18 @@ class SentenciaIF(Instruccion):
         if exp.value == True:
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaIF lin_"+str(self.line))
             tieneReturn=self.bloqueInst.ejecutar(entornoInterno)
-            return
-        if self.listaELIF != None:
+            if tieneReturn != None:
+                return tieneReturn
+        elif self.listaELIF != None:
             for instElif in self.listaELIF:
                 aux:SentenciaELIF = instElif
                 res = aux.ejecutar(enviroment)
-                if res: return
-        
-        if self.elseST != None:
+                if res!= None:
+                     return res
+        elif self.elseST != None:
             bloque:BloqueInstrucciones = self.elseST
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaELSE lin_"+str(self.line))
-            bloque.ejecutar(enviroment)
+            e=bloque.ejecutar(enviroment)
+            if e !=None:
+                return e
+        

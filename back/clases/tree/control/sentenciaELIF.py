@@ -13,11 +13,12 @@ class SentenciaELIF(Instruccion):
         exp:Return = self.condicion.ejecutar(enviroment)
         if exp.tipo != Type.BOOL:
             print('error en expresion de elif')
-            return False
+            return 
         if exp.value ==False:
-            return False
+            return
         
         if exp.value:
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaIFLIF lin_"+str(self.line))
             tieneReturn=self.bloque.ejecutar(entornoInterno)
-        return True
+            if tieneReturn != None:
+                return tieneReturn
