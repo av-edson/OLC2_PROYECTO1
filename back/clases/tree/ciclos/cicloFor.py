@@ -30,17 +30,55 @@ class CicloFor(Instruccion):
                 if ret != None:
                     if ret.tipo == Type.BREACKST:
                         break
-                    elif ret.tipo == Type.CONTINUEST:
-                        continue
-                    else:
+                    elif ret.tipo != Type.CONTINUEST:
                         return ret
                 inicio+=1
                 entornoInterno.modificar_variable(self.variable,inicio)
                 ciclo = self.valuarRango(inicio,fin)
-            
+        else:
+            var = self.expr1.ejecutar(enviroment)
+            if var.tipo==Type.STRING:
+                var = str(var.value)
+                listaCaracteres = []
+                for car in var:
+                    listaCaracteres.append(car)
+                inicio = 1
+                fin = len(listaCaracteres)
+                entornoInterno:Enviroment = Enviroment(enviroment,"ciclo for")
+                entornoInterno.add_variable(self.variable,listaCaracteres[inicio-1],Type.STRING,2)
+                ciclo = self.valuarRango(inicio,fin)
+                while ciclo:
+                    ret =self.bloque.ejecutar(entornoInterno)
+                    if ret != None:
+                        if ret.tipo == Type.BREACKST:
+                            break
+                        elif ret.tipo != Type.CONTINUEST:
+                            if ret.tipo==Type.RETURNST:
+                                return
+                            else:
+                                if self.validarReturn(entornoInterno):
+                                    return ret
+                                else:
+                                    print("return no valido ")
+                                    return
+                    inicio+=1
+                    ciclo = self.valuarRango(inicio,fin)
+                    if ciclo:
+                        entornoInterno.modificar_variable(self.variable,listaCaracteres[inicio-1])
+            else:
+                print('expresion invalida para el ciclo for')
 
     def valuarRango(self,inicio,fin):
         if inicio <= fin:
             return True 
         else: 
             return False
+
+    def validarReturn(self,enviroment:Enviroment):
+        padre = enviroment.antecesor
+        while padre != None:
+            name = str(padre.nombre)
+            if name.startswith("funcion"):
+                return True
+            padre = padre.antecesor
+        return False

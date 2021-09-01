@@ -24,5 +24,5 @@ except:
 # !!!!!NO PUEDE TERMINAR CON UN COMENTARIO!!!!!!!!
 
 
-
+print(str("\n"))
 f.close()

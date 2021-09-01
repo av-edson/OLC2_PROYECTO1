@@ -1,8 +1,1 @@
-function get()
-    return trunc(Int64, 3.99999) ;
-end;
-
-for i in (2-5):get()               # Recorre rango de 1:4
-    print(i, " ");          # Únicamente se recorre ascendentemente
-end;    
-println("");
+print("\n");

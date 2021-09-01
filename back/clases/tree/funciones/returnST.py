@@ -8,11 +8,14 @@ class ReturnFunc(Instruccion):
     
     def ejecutar(self, enviroment):
         try:
-            exp:Return = self.valor.ejecutar(enviroment)
-            if exp.tipo != Type.UNDEFINED:
-                return exp
+            if self.valor != None:
+                exp:Return = self.valor.ejecutar(enviroment)
+                if exp.tipo != Type.UNDEFINED:
+                    return exp
+                else:
+                    return Return()
             else:
-                return Return()
+                return Return(0,Type.RETURNST)
         except:
             print("Error en el return"+str(self.line))
             return Return()

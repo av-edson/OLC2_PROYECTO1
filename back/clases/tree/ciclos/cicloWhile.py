@@ -26,11 +26,26 @@ class CicloWhile(Instruccion):
                             print("espresion no booleana en while")
                             return
                         continue
+                    elif ret.tipo==Type.RETURNST:
+                        return
                     else:
-                        return ret
+                        if self.validarReturn(entornoInterno):
+                            return ret
+                        else:
+                            print("return no valido ")
+                            return
                 expr = self.condicion.ejecutar(enviroment)
                 if expr.tipo != Type.BOOL:
                     print("espresion no booleana en while")
                     return
         except:
             print('Error desconocido en sentencia while')
+
+    def validarReturn(self,enviroment:Enviroment):
+        padre = enviroment.antecesor
+        while padre != None:
+            name = str(padre.nombre)
+            if name.startswith("funcion"):
+                return True
+            padre = padre.antecesor
+        return False

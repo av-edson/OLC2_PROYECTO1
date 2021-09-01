@@ -10,6 +10,8 @@ class ExpresionLiteral(Expresion):
         self.valor=valorDato
     
     def ejecutar(self, enviroment):
+        if self.tipo==Type.STRING:
+            self.valor = str(self.valor).replace("\\n","\n")
         return Return(self.valor,self.tipo)
 
 

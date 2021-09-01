@@ -344,6 +344,7 @@ def p_sentencia_for(t):
 
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)
+    print(t)
 
 import ply.yacc as yacc
 parser = yacc.yacc()
