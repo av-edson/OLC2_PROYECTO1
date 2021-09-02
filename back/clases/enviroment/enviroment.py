@@ -6,6 +6,8 @@ class Enviroment:
         self.variables = {}
         self.funciones = {}
         self.nombre = nombre
+        if antecesor == None:
+            self.consola=""
 
     def getGlobal(self):
         entorno = self

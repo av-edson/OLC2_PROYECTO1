@@ -1,1 +1,2 @@
-print("\n");
+s=8;
+print("hola joto\n");

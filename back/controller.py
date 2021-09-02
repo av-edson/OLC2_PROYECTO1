@@ -1,9 +1,37 @@
+from clases.error import Error
 from analizadores.gramatica import parser
-from clases.enviroment.enviroment import *
-from clases.enviroment.simbolo import Simbolo
+from clases.enviroment.enviroment import Enviroment
+from analizadores.lexer import errores
+class Regreso:
+    def __init__(self,consola,arbol,er):
+        self.consola = consola
+        self.ast = arbol
+        self.errores =er
 
-def analizarEntrada(contenido):
-    print(contenido)
+def objToJson(obj):
+    lista = []
+    for er in obj:
+        dic = {}
+        dic["desc"]=er.desc
+        dic["lin"]=er.lin
+        dic["col"]=er.col
+        dic["fecha"]=er.fecha
+        lista.append(dic)
+    return lista
+
+def analizarEntrada(contenido=None):
+    global errores
+    errores.clear()
+    ast = parser.parse(contenido)
+    gl = Enviroment(None,"Global")
+    try:
+        for instruccion in ast:
+            if instruccion != None:
+                d=instruccion.ejecutar(gl)
+    except:
+        print("Error al ejecutar instrucciones")
+    listJson = objToJson(errores)
+    return Regreso(gl.consola,0,listJson)
 
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
@@ -11,18 +39,22 @@ ast = parser.parse(contenido)
 gl = Enviroment(None,"Global")
 try:
     for instruccion in ast:
-        d=instruccion.ejecutar(gl)
+        if instruccion != None:
+            d=instruccion.ejecutar(gl)
         x = 4
-    #for var in gl.variables:
+except:
+    print("Error al ejecutar instrucciones")
+f.close()
+print(gl.consola)
+#for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
     #    print(str(aux.simbolId)+" "+str(aux.valor)+" "+str(aux.tipo))
         #s=instruccion.ejecutar(gl)
         #print(str(s.tipo)+" --- "+str(s.value))
-except:
-    print("Error al ejecutar instrucciones")
 
-# !!!!!NO PUEDE TERMINAR CON UN COMENTARIO!!!!!!!!
+#s=analizarEntrada("~s=8;\nprint(\"hola joto\");")
+#print(s.errores)
 
-
-print(str("\n"))
-f.close()
+#print("---------------")
+#for er in errores:
+#    print(er.desc+" -> "+er.lin)

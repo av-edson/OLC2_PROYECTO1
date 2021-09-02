@@ -17,6 +17,7 @@ from clases.tree.control.sentenciaIF import SentenciaIF
 from clases.tree.ciclos.cicloWhile import CicloWhile
 from clases.tree.ciclos.cicloFor import CicloFor
 from clases.expresiones import *
+
 #------------------ SINTACTICO ---------------------------
 precedence = (
     ('left','LOR'),
@@ -49,7 +50,10 @@ def p_instruccion(t):
                     |   sentencia_control
                     |   salto_control PUNTOCOMA'''
     t[0]=t[1]
-
+def p_instruccion_error(t):
+    '''instruccion  :   error PUNTOCOMA'''
+    errores.append(Error("Error sintactico en: '"+str(t[1].value)+"'",str(t.lineno(1)), str(t.lexpos(1)),str(time.strftime("%c"))))
+    t[0]=None
 def p_bloque_instrucciones(t):
     '''bloque_instrucciones :   instrucciones'''
     t[0] = BloqueInstrucciones(t[1],t.lineno(1),t.lexpos(0))
@@ -342,9 +346,8 @@ def p_sentencia_for(t):
     else:
         t[0]=CicloFor(t[2],t[4],t[5],t.lineno(1), t.lexpos(1))
 
-def p_error(t):
-    print("Error sintáctico en '%s'" % t.value)
-    print(t)
+    #errores.append(Error("Error sintáctico en: '"+str(t.value[0])+"'","0","0",str(time.strftime("%c"))))
+
 
 import ply.yacc as yacc
 parser = yacc.yacc()

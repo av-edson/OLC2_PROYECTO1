@@ -1,8 +1,5 @@
-#from clases.enviroment.simbolo import Simbolo
-from clases.enviroment.enviroment import Enviroment
-from clases.abstract.expresion import Expresion
 from clases.abstract.instruccion import Instruccion
-from clases.abstract.type import *
+from clases.abstract.type import Type
 from enum import Enum
 
 class TipoImpresion(Enum):
@@ -24,18 +21,22 @@ class Imprimir(Instruccion):
                 return
             lista.append(res)
         if self.tipo==TipoImpresion.PRINT:
-            self.imprimir_simple(lista)
+            self.imprimir_simple(lista,enviroment)
         else:
             self.imprimir_ml(lista)
     
-    def imprimir_simple(self,lista):
+    def imprimir_simple(self,lista,enviroment):
         res=""
         for ex in lista:
             res+=str(ex.value)
-        print(res, end="")
+        env = enviroment.getGlobal()
+        env.consola += res
+        #print(consola, end="")
 
-    def imprimir_ml(self,lista):
+    def imprimir_ml(self,lista,enviroment):
         aux = ""
         for res in lista:
             aux+=str(res.value)
-        print(aux)
+        env = enviroment.getGlobal()
+        env.consola += res
+        #print(aux)

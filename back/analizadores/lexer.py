@@ -1,3 +1,7 @@
+#from controller import consola
+from error import Error
+import time
+errores=[]
 reservadas = {
     'log10' : 'FLOG10',
     'log' : 'FLOG',
@@ -147,10 +151,12 @@ def t_ID(t):
 def t_COMENTARIOMULTIPLE(t):
     r'\#\=((.|\n)*)?\=\#'
     t.lexer.lineno += t.value.count("\n")
+    pass
 # comentario simple
 def t_COMENTARIO_SIMPLE(t):
     r'\#.*\n'
     t.lexer.lineno += 1
+    pass
 # ignorados
 t_ignore = " \t"
 #salto de linea
@@ -162,8 +168,14 @@ def t_eof(t):
     return None
 # manejador de errores
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    #print("Illegal character '%s'" % t.value[0])
+    # print(t.lexer.lineno) t.lexer.lineno t.lexer.value 
+    errores.append(Error("Caracter no esperado: '"+str(t.value[0])+"'",str(t.lexer.lineno),str(t.lexer.lexpos),str(time.strftime("%c"))))
     t.lexer.skip(1)
+
+def buscarColumna(inp, token):
+    line_start = inp.rfind('\n', 0, token.lexpos) + 1
+    return (token.lexpos - line_start) + 1
 
 import ply.lex as lex
 lexer = lex.lex()
