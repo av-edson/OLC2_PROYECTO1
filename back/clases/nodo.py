@@ -18,7 +18,7 @@ class Nodo:
         return self.grafo
 
     def __graficar(self,padre:str,node):
-        for hijo in node.hijos:
+        for hijo in node.hijos: 
             if hijo != None:
                 nombre:str = "nodo"+str(self.contador)
                 self.grafo += nombre + "[label=\""+str(hijo.valor)+"\"];\n"
