@@ -23,20 +23,20 @@ class Imprimir(Instruccion):
         if self.tipo==TipoImpresion.PRINT:
             self.imprimir_simple(lista,enviroment)
         else:
-            self.imprimir_ml(lista)
+            self.imprimir_ml(lista,enviroment)
     
     def imprimir_simple(self,lista,enviroment):
         res=""
         for ex in lista:
             res+=str(ex.value)
         env = enviroment.getGlobal()
-        env.consola += res
+        env.consola += res 
         #print(consola, end="")
 
     def imprimir_ml(self,lista,enviroment):
-        aux = ""
-        for res in lista:
-            aux+=str(res.value)
+        res = ""
+        for ex in lista:
+            res+=str(ex.value)
         env = enviroment.getGlobal()
-        env.consola += res
+        env.consola += res + "\n"
         #print(aux)

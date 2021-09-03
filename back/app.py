@@ -22,8 +22,9 @@ def compilar():
     #contenido = content.code
     #print(content['code'])
     ret:Regreso = analizarEntrada(content['code'])
-    print(ret.errores)
-    response = flask.jsonify({"consola":ret.consola,"errores":ret.errores})
+    #print(ret.errores)
+    response = flask.jsonify({"consola":ret.consola,"errores":ret.errores,"ast":ret.ast})
+    #print(ret.ast)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 app.run()

@@ -1,2 +1,1 @@
-s=8;
-print("hola joto\n");
+println(1+2-3*4+55^2/45%2);

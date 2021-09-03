@@ -1,7 +1,10 @@
+from clases.nodo import Nodo
 from clases.error import Error
 from analizadores.gramatica import parser
+from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
 from analizadores.lexer import errores
+
 class Regreso:
     def __init__(self,consola,arbol,er):
         self.consola = consola
@@ -20,6 +23,7 @@ def objToJson(obj):
     return lista
 
 def analizarEntrada(contenido=None):
+    arbol:Nodo= parser2.parse(contenido)
     global errores
     errores.clear()
     ast = parser.parse(contenido)
@@ -31,21 +35,23 @@ def analizarEntrada(contenido=None):
     except:
         print("Error al ejecutar instrucciones")
     listJson = objToJson(errores)
-    return Regreso(gl.consola,0,listJson)
+    return Regreso(gl.consola,arbol.getGrafico(),listJson)
 
-f = open('entrada.txt',encoding="UTF-8")
-contenido = f.read()
-ast = parser.parse(contenido)
-gl = Enviroment(None,"Global")
-try:
-    for instruccion in ast:
-        if instruccion != None:
-            d=instruccion.ejecutar(gl)
-        x = 4
-except:
-    print("Error al ejecutar instrucciones")
-f.close()
-print(gl.consola)
+#f = open('entrada.txt',encoding="UTF-8")
+#contenido = f.read()
+#ast = parser.parse(contenido)
+#gl = Enviroment(None,"Global")
+#arbol:Nodo = parser2.parse(contenido)
+#try:
+#    for instruccion in ast:
+#        if instruccion != None:
+#            d=instruccion.ejecutar(gl)
+#        x = 4
+#except:
+#    print("Error al ejecutar instrucciones")
+#f.close()
+#print(gl.consola)
+#print(arbol.getGrafico())
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
     #    print(str(aux.simbolId)+" "+str(aux.valor)+" "+str(aux.tipo))

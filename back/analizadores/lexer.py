@@ -1,5 +1,5 @@
 #from controller import consola
-from error import Error
+from clases.error import Error
 import time
 errores=[]
 reservadas = {
