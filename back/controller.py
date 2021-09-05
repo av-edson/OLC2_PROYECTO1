@@ -37,20 +37,20 @@ def analizarEntrada(contenido=None):
     listJson = objToJson(errores)
     return Regreso(gl.consola,arbol.getGrafico(),listJson)
 
-#f = open('entrada.txt',encoding="UTF-8")
-#contenido = f.read()
-#ast = parser.parse(contenido)
-#gl = Enviroment(None,"Global")
+f = open('entrada.txt',encoding="UTF-8")
+contenido = f.read()
+ast = parser.parse(contenido)
+gl = Enviroment(None,"Global")
 #arbol:Nodo = parser2.parse(contenido)
-#try:
-#    for instruccion in ast:
-#        if instruccion != None:
-#            d=instruccion.ejecutar(gl)
-#        x = 4
-#except:
-#    print("Error al ejecutar instrucciones")
-#f.close()
-#print(gl.consola)
+try:
+    for instruccion in ast:
+        if instruccion != None:
+            d=instruccion.ejecutar(gl)
+        x = 4
+except:
+    print("Error al ejecutar instrucciones")
+f.close()
+print(gl.consola)
 #print(arbol.getGrafico())
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)

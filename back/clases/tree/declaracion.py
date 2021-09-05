@@ -20,6 +20,7 @@ class Asignacion(Instruccion):
         # simbolo de regreso
         reg:Return = self.valor.ejecutar(env)
         if reg.tipo == Type.UNDEFINED:
+            
             print(' expresion no valida para asignar la variable')
         # validar el tipo de dato dentro de la expresion a asignar
         t = reg.tipo

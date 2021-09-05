@@ -8,6 +8,7 @@ class Enviroment:
         self.nombre = nombre
         if antecesor == None:
             self.consola=""
+            self.listaErrores=[]
 
     def getGlobal(self):
         entorno = self

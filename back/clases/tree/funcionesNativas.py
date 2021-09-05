@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.enviroment.enviroment import Enviroment
 from clases.abstract.expresion import Expresion
 from clases.abstract.type import *
@@ -37,6 +39,8 @@ class FSimple(Expresion):
             else:
                 return Return()
         except:
+            gl:Enviroment = enviroment.getGlobal()
+            gl.listaErrores.append(Error("error en una funcion nativa ",self.line,self.column,time.strftime("%c")))
             print('error en una funcion '+str(self.line))
             return Return()
     

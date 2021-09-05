@@ -1,1 +1,20 @@
-println(1+2-3*4+55^2/45%2);
+function  ackerman(m,n)
+    if( (n<0) || (m<0) )
+        println("Parametros no validos");
+    end;
+    if(m==0)
+        n = n+1;
+        return n;
+    end;
+    if(n==0)
+        return ackerman(m-1,1);
+    end;
+    return ackerman(m-1,ackerman(m,n-1));
+end;
+
+function algo()
+a = ackerman(3,4);
+println(a);
+end;
+
+algo();

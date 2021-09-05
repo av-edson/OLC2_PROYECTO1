@@ -11,19 +11,18 @@ class LLamadaFuncion(Expresion):
         Expresion.__init__(self,line, column)
         self.lista = listaExpr
         self.ide = identificador
-        self.listaDatosExpresiones = []
     
     def ejecutar(self, enviroment):
-        env:Enviroment = enviroment
-        func:Funcion = env.get_fuction(self.ide)
+        func:Funcion = enviroment.get_fuction(self.ide)
         if func != None:
-            entornoInterno =  Enviroment(env,"funcion_"+str(self.ide))
-            if self.validarFuncion(func,enviroment):
+            entornoInterno =  Enviroment(enviroment,"funcion_"+str(self.ide))
+            listaRegreso = self.validarFuncion(func,enviroment,self.lista)
+            if listaRegreso != None:
                 # declarando las variables en el entorno
                 if self.lista != None:
                     for i in range(len(self.lista)):
                         p:Parametro = func.params[i]
-                        e:Return = self.listaDatosExpresiones[i] 
+                        e:Return = listaRegreso[i] 
                         # referencia de listas y structs
                         if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
                             if p.tipoDato == None:
@@ -41,27 +40,27 @@ class LLamadaFuncion(Expresion):
             print('Funcion no definida o no se encontro')
             return Return()
 
-    def validarFuncion(self,func:Funcion,enviroment):
-        self.listaDatosExpresiones=[]
-        for expre in self.lista:
+    def validarFuncion(self,func:Funcion,enviroment,lista):
+        listaRegreso=[]
+        for expre in lista:
             val:Return = expre.ejecutar(enviroment)
             # si una expresion tiene error se sale del programa
             if val.tipo == Type.UNDEFINED:
                 print('Una expresion que envio como parametro contiene error en la funcion')
-                return False
+                return None
             else:
-                self.listaDatosExpresiones.append(val)
+                listaRegreso.append(val)
             # viendo que coincidan los datos de expresiones con los parametros
-        if len(func.params) != len(self.listaDatosExpresiones):
+        if len(func.params) != len(listaRegreso):
             # si tienen numero diferente de parametros
             print('numero de parametros que envio no coicide con el definido')
-            return False
+            return None
         # validando tipo de dato
-        for i in range(len(self.listaDatosExpresiones)):
-            expr:Return = self.listaDatosExpresiones[i]
+        for i in range(len(lista)):
+            expr:Return = listaRegreso[i]
             param:Parametro = func.params[i]
             if expr.tipo != param.tipoDato:
                 if param.tipoDato != None:
                     print('Un tipo de dato no coicide')
-                    return False
-        return True
+                    return None
+        return listaRegreso
