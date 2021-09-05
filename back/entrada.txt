@@ -1,20 +1,13 @@
-function  ackerman(m,n)
-    if( (n<0) || (m<0) )
-        println("Parametros no validos");
-    end;
-    if(m==0)
-        n = n+1;
-        return n;
-    end;
-    if(n==0)
-        return ackerman(m-1,1);
-    end;
-    return ackerman(m-1,ackerman(m,n-1));
+mutable struct Node
+    value::Int64;
+    next;
 end;
 
-function algo()
-a = ackerman(3,4);
-println(a);
+mutable struct List
+    first;
 end;
 
-algo();
+lista = List(nothing);
+lista.first = 4;
+lista.first = lista.first + lista.first;
+println(lista);

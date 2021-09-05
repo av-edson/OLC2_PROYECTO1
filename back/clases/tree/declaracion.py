@@ -20,7 +20,6 @@ class Asignacion(Instruccion):
         # simbolo de regreso
         reg:Return = self.valor.ejecutar(env)
         if reg.tipo == Type.UNDEFINED:
-            
             print(' expresion no valida para asignar la variable')
         # validar el tipo de dato dentro de la expresion a asignar
         t = reg.tipo
@@ -34,6 +33,9 @@ class Asignacion(Instruccion):
             if self.tipo != t:
                 print('-------expresion y tipo de dato en asignacion no coiciden-----')
                 return
+        if self.tipo == Type.STRUCT:
+            env.addVariableStruct(self.ide,reg.value)
+            return
         env.add_variable(self.ide,reg.value,self.tipo,self.alcance)
 
 

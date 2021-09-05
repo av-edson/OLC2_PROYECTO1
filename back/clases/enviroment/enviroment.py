@@ -5,6 +5,7 @@ class Enviroment:
         self.antecesor = antecesor
         self.variables = {}
         self.funciones = {}
+        self.estructuras = {}
         self.nombre = nombre
         if antecesor == None:
             self.consola=""
@@ -82,3 +83,28 @@ class Enviroment:
                 return env.funciones[identificador]
             env = env.antecesor
         return None
+
+    def addStruct(self,identificador,struct):
+        if identificador in self.estructuras.keys():
+            return False
+        else:
+            self.estructuras[identificador] = struct
+            return True
+
+    def getStruct(self, identidicador):
+        env = self
+        while env != None:
+            if identidicador in env.estructuras.keys():
+                return env.estructuras[identidicador]
+            env = env.antecesor
+        return None
+            
+    def addVariableStruct(self,identificador,struct):
+        env:Enviroment = self
+        sim = Simbolo(struct,identificador,Type.STRUCT)
+        while env != None:
+            if identificador in env.variables.keys():
+                env.variables[identificador]=sim
+                return
+            env = env.antecesor
+        self.variables[identificador]=sim

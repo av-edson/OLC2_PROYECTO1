@@ -1,3 +1,6 @@
+from clases.tree.structs.ModificarStruct import ModificarStruct
+from clases.expresiones.accesoStruct import AccesoStruct
+from clases.tree.structs.CrearStruct import CrearStruct
 from clases.tree.funciones.funcion import Funcion
 from clases.expresiones.exprBinaria import *
 from clases.expresiones.expresionLiteral import ExpresionLiteral, Identificador
@@ -16,6 +19,7 @@ from clases.tree.control.sentenciaELIF import SentenciaELIF
 from clases.tree.control.sentenciaIF import SentenciaIF
 from clases.tree.ciclos.cicloWhile import CicloWhile
 from clases.tree.ciclos.cicloFor import CicloFor
+from clases.tree.structs.DecrararStruct import DeclararStruct
 from clases.expresiones import *
 
 #------------------ SINTACTICO ---------------------------
@@ -48,7 +52,9 @@ def p_instruccion(t):
                     |   llamada_funcion PUNTOCOMA
                     |   funcion_return  PUNTOCOMA
                     |   sentencia_control
-                    |   salto_control PUNTOCOMA'''
+                    |   salto_control PUNTOCOMA
+                    |   crear_struct PUNTOCOMA
+                    |   modificar_struct PUNTOCOMA'''
     t[0]=t[1]
 def p_instruccion_error(t):
     '''instruccion  :   error PUNTOCOMA'''
@@ -87,7 +93,8 @@ def p_tipodato(t):
                     |   DFLOAT64 
                     |   DBOOL 
                     |   DSTRING 
-                    |   DCHAR '''    
+                    |   DCHAR 
+                    |   STRUCT'''    
     if t.slice[1].type=='DINT64':
         t[0]=Type.INT
     elif t.slice[1].type=='DFLOAT64':
@@ -98,6 +105,8 @@ def p_tipodato(t):
         t[0]=Type.STRING
     elif t.slice[1].type=='DCHAR':
         t[0]=Type.CHAR
+    elif t.slice[1].type=='STRUCT':
+        t[0]=Type.STRUCT
 def p_expresion(t):
     '''expresion    :   RESTA expresion %prec UMENOS
                     |   expresion_bin
@@ -191,7 +200,8 @@ def p_final_expresion(t):
                         |   CARACTER
                         |   BOOLEANO
                         |   NULO
-                        |   ID'''
+                        |   ID
+                        |   accesoStruct'''
     if len(t) == 2:
         if t.slice[1].type == "ENTERO":
             t[0] = ExpresionLiteral(Type.INT,int(t[1]),t.lineno(1),t.lexpos(0))
@@ -210,7 +220,7 @@ def p_final_expresion(t):
             t[0] = ExpresionLiteral(Type.NULO,str(t[1]),t.lineno(1),t.lexpos(0))
         elif t.slice[1].type=="ID":
             t[0] = Identificador(str(t[1]),t.lineno(1),t.lexpos(0))
-        else: # para la llamada de funcion
+        else: # para la llamada de funcion o struct
             t[0]=t[1]
     else:
         t[0] = t[2]
@@ -279,7 +289,10 @@ def p_params_funcion(t):
 def p_llamada_funcion(t):
     '''llamada_funcion  :   ID PARENTESIS_IZQ PARENTESIS_DER
                         |   ID PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
-    if len(t)==4:
+    if str(t[1]) in listaStructs:
+        t[0]=DeclararStruct(t[1],t[3],t.lineno(1), t.lexpos(1))
+        esStruct=True
+    elif len(t)==4:
         t[0] = LLamadaFuncion(t[1],[],t.lineno(1), t.lexpos(1))
     else:
         t[0] = LLamadaFuncion(t[1],t[3],t.lineno(1), t.lexpos(1)) 
@@ -338,6 +351,7 @@ def p_salto_control(t):
     elif t.slice[1].type=="BREACKST":
         t[0] = ExpresionLiteral(Type.BREACKST,str(t[1]),t.lineno(1),t.lexpos(0))
 
+
 def p_sentencia_for(t):
     '''sentencia_for    :   FORST ID EIN expresion DOSPUNTOS expresion bloque_instrucciones FIN
                         |   FORST ID EIN expresion bloque_instrucciones FIN'''
@@ -348,6 +362,40 @@ def p_sentencia_for(t):
 
     #errores.append(Error("Error sintáctico en: '"+str(t.value[0])+"'","0","0",str(time.strftime("%c"))))
 
+def p_crear_struct(t):
+    '''crear_struct  :   STRUCT ID contenido_struct FIN
+                    |   MUTABLE STRUCT ID contenido_struct FIN'''
+    if len(t)==5:
+        t[0]=CrearStruct(t[2],t[3],False,t.lineno(1),t.lexpos(1))
+        listaStructs.append(str(t[2]))
+    else:
+        t[0]=CrearStruct(t[3],t[4],True,t.lineno(1),t.lexpos(1))
+        listaStructs.append(str(t[3]))
+
+def p_contenido_struct(t):
+    '''contenido_struct :   contenido_struct struct_atributo
+                        |   struct_atributo'''
+    if len(t)==2:
+        t[0]=[t[1]]
+    else:
+        t[1].append(t[2])
+        t[0]=t[1]
+
+def p_atributo_struct(t):
+    '''struct_atributo  :   ID PUNTOCOMA
+                        |   ID DOSPUNTOS DOSPUNTOS tipodato PUNTOCOMA'''
+    if len(t)==3:
+        t[0]=Simbolo(None,t[1],None)
+    else:
+        t[0]=Simbolo(None,t[1],t[4])
+
+def p_acceso_struct(t):
+    '''accesoStruct :   ID PUNTO ID'''
+    t[0] = AccesoStruct(str(t[1]),str(t[3]),t.lineno(1),t.lexpos(1))
+
+def p_modificar_struct(t):
+    '''modificar_struct :   ID PUNTO ID IGUAL expresion'''
+    t[0]=ModificarStruct(t[1],t[3],t[5],t.lineno(1),t.lexpos(1))
 
 import ply.yacc as yacc
 parser = yacc.yacc()

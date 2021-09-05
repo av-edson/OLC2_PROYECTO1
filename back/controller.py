@@ -1,7 +1,7 @@
 from clases.nodo import Nodo
 from clases.error import Error
 from analizadores.gramatica import parser
-from analizadores.gramaticaArbol import parser2
+#from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
 from analizadores.lexer import errores
 
@@ -23,7 +23,7 @@ def objToJson(obj):
     return lista
 
 def analizarEntrada(contenido=None):
-    arbol:Nodo= parser2.parse(contenido)
+    #arbol:Nodo= parser2.parse(contenido)
     global errores
     errores.clear()
     ast = parser.parse(contenido)
@@ -35,7 +35,8 @@ def analizarEntrada(contenido=None):
     except:
         print("Error al ejecutar instrucciones")
     listJson = objToJson(errores)
-    return Regreso(gl.consola,arbol.getGrafico(),listJson)
+    #return Regreso(gl.consola,arbol.getGrafico(),listJson)
+
 
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()

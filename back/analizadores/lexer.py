@@ -2,6 +2,8 @@
 from clases.error import Error
 import time
 errores=[]
+listaStructs=[]
+esStruct = False
 reservadas = {
     'log10' : 'FLOG10',
     'log' : 'FLOG',
@@ -16,7 +18,7 @@ reservadas = {
     'Bool':'DBOOL',
     'Char':'DCHAR',
     'String':'DSTRING',
-    'Nulo':'NULO',
+    'nothing':'NULO',
     'true':'BOOLEANO',
     'false':'BOOLEANO',
     'print':'IMPRIMIR',
@@ -40,7 +42,9 @@ reservadas = {
     'continue':'CONTINUEST',
     'break':'BREACKST',
     'for':'FORST',
-    'in':'EIN'
+    'in':'EIN',
+    'struct':'STRUCT',
+    'mutable':'MUTABLE',
 }
 
 tokens = [
@@ -82,6 +86,7 @@ tokens = [
     'PUNTOCOMA',
     'COMA',
     'DOSPUNTOS',
+    'PUNTO',
 ] + list(reservadas.values())
 
 # Tokens
@@ -111,6 +116,7 @@ t_IGUAL = r'\='
 t_PUNTOCOMA = r'\;'
 t_COMA = r'\,'
 t_DOSPUNTOS = r'\:'
+t_PUNTO  = r'\.'
 
 
 #decimal

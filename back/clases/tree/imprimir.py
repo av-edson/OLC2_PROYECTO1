@@ -2,7 +2,7 @@ import time
 from clases.error import Error
 from clases.enviroment.enviroment import Enviroment
 from clases.abstract.instruccion import Instruccion
-from clases.abstract.type import Type
+from clases.abstract.type import Return, Type
 from enum import Enum
 
 class TipoImpresion(Enum):
@@ -24,6 +24,10 @@ class Imprimir(Instruccion):
                 gl.listaErrores.append(Error("Una de las expresiones el print tiene error",self.line,self.column,time.strftime("%c")))
                 print('una de las expresiones el print tiene error')
                 return
+            if res.tipo==Type.STRUCT:
+                aux=str(expre.identificador)+":"+str(res.value.tipoStruct)
+                aux+=self._getStruct(res.value.atributos)
+                res.value = aux
             lista.append(res)
         if self.tipo==TipoImpresion.PRINT:
             self.imprimir_simple(lista,enviroment)
@@ -45,3 +49,13 @@ class Imprimir(Instruccion):
         env = enviroment.getGlobal()
         env.consola += res + "\n"
         #print(aux)
+
+    def _getStruct(self,atributos):
+        contenido = "{"
+        for atributo in atributos:
+            if atributo.tipo == Type.STRUCT:
+                contenido+=self._getStruct(atributo.valor.atributos)
+            else:
+                contenido+=str(atributo.simbolId)+":"+str(atributo.valor)+","
+        contenido+="}"
+        return contenido
