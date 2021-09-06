@@ -22,9 +22,11 @@ class ExpresionRelacional(Expresion):
             der = self.derecho.ejecutar(enviroment)
             izq = self.izquierdo.ejecutar(enviroment)
             if not(izq.tipo==Type.INT or izq.tipo==Type.FLOAT or izq.tipo==Type.STRING):
-                return Return()
+                if not (self.tipo==OpRelacional.DIFERENTE or self.tipo==OpRelacional.IGUALIGUAL):
+                    return Return()
             if not(der.tipo==Type.INT or der.tipo==Type.FLOAT or der.tipo==Type.STRING):
-                return Return()
+                if not (self.tipo==OpRelacional.DIFERENTE or self.tipo==OpRelacional.IGUALIGUAL):
+                    return Return()
             if self.tipo==OpRelacional.MAYORQUE:
                 return self.mayor(izq,der)
             elif self.tipo==OpRelacional.MENORQUE:

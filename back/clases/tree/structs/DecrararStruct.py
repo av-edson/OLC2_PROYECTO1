@@ -11,15 +11,12 @@ class DeclararStruct(Instruccion):
         Instruccion.__init__(self,line, column)
         self._lista = listaExpresiones
         self.tipoStruct = tipoStruct
-        self.mutable=False
-        self.atributos={}
 
     def ejecutar(self, enviroment):
         struct = enviroment.getStruct(self.tipoStruct)
         if struct == None:
             print("No se encontro struct definida")
-            return
-        self.mutable = struct.mutable
+            return Return()
         listaExpresiones = self.evaluarExpresiones(self._lista,enviroment)
         # evaluando las expresiones con el tipo expresion del struct
         if len(listaExpresiones) != len(struct.atributos):
@@ -31,10 +28,14 @@ class DeclararStruct(Instruccion):
                 if struct.atributos[i].tipo != None and struct.atributos[i].tipo != Type.NULO:
                     print("uno de los tipos de datos del struct no coincide con el declarado")
                     return Return()
+                elif listaExpresiones[i].tipo == Type.UNDEFINED:
+                    print("Error en uno de los parametros para declarar la struct")
+                    return Return()
             simboloAux = Simbolo(listaExpresiones[i].value,struct.atributos[i].simbolId,listaExpresiones[i].tipo)
             aux.append(simboloAux)
-        self.atributos = aux
-        return Return(self,Type.STRUCT)
+        mutable = struct.mutable
+        simboloStruct = Simbolo(aux,None,Type.STRUCT,struct,mutable)
+        return Return(simboloStruct,Type.STRUCT)
 
     def evaluarExpresiones(self,lista,enviroment):
         resutado = []

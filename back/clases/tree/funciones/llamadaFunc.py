@@ -13,32 +13,40 @@ class LLamadaFuncion(Expresion):
         self.ide = identificador
     
     def ejecutar(self, enviroment):
-        func:Funcion = enviroment.get_fuction(self.ide)
-        if func != None:
-            entornoInterno =  Enviroment(enviroment,"funcion_"+str(self.ide))
-            listaRegreso = self.validarFuncion(func,enviroment,self.lista)
-            if listaRegreso != None:
-                # declarando las variables en el entorno
-                if self.lista != None:
-                    for i in range(len(self.lista)):
-                        p:Parametro = func.params[i]
-                        e:Return = listaRegreso[i] 
-                        # referencia de listas y structs
-                        if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
+        try:
+            func:Funcion = enviroment.get_fuction(self.ide)
+            if func != None:
+                entornoInterno =  Enviroment(enviroment,"funcion_"+str(self.ide))
+                listaRegreso = self.validarFuncion(func,enviroment,self.lista)
+                if listaRegreso != None:
+                    # declarando las variables en el entorno
+                    if self.lista != None:
+                        for i in range(len(self.lista)):
+                            p:Parametro = func.params[i]
+                            e:Return = listaRegreso[i] 
+                            # referencia de listas y structs
                             if p.tipoDato == None:
                                 p.tipoDato = e.tipo
-                            entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2)
-                # ejecutando las instrucciones de la funcion
-                bloque:BloqueInstrucciones = func.instrucciones
-                tieneReturn=bloque.ejecutar(entornoInterno)
-                if tieneReturn !=None:
-                    return tieneReturn
-                #print('espero todo haya salido bien xd')
+                            if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
+                                entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2)
+                            else:
+                                # agregando variable local struct
+                                e = e.value
+                                entornoInterno.addVariableStruct(p.identificador,e.tipoStruct,e.tipoStruct.mutable,e.atributos)
+
+                    # ejecutando las instrucciones de la funcion
+                    bloque:BloqueInstrucciones = func.instrucciones
+                    tieneReturn=bloque.ejecutar(entornoInterno)
+                    if tieneReturn !=None:
+                        return tieneReturn
+                    #print('espero todo haya salido bien xd')
+                else:
+                    return Return()
             else:
+                print('Funcion no definida o no se encontro')
                 return Return()
-        else:
-            print('Funcion no definida o no se encontro')
-            return Return()
+        except:
+            print("Error desconocido dentro de la funcion ")
 
     def validarFuncion(self,func:Funcion,enviroment,lista):
         listaRegreso=[]

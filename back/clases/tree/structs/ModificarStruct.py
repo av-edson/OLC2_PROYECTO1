@@ -17,24 +17,21 @@ class ModificarStruct(Instruccion):
             simbolo = enviroment.findVariable(self.identificador)
             if simbolo!=None:
                 if simbolo.tipo == Type.STRUCT:
-                    if not simbolo.valor.mutable:
+                    if not simbolo.tipoStruct.mutable:
                         print("la estruct no es mutable")
                         return
-                    atributos = simbolo.valor.atributos
-                    encontrado = None
+                    atributos = simbolo.atributos
                     for sim in atributos:
                         if sim.simbolId == self.atributo:
-                            encontrado = sim
-                            break
-                    if encontrado == None:
-                        print("error, no se encontro atributo del struct")  
-                        return
-                    if encontrado.tipo != valor.tipo:
-                        if encontrado.tipo != Type.NULO:
-                            print("No se puede cambiar el tipo de dato del atributo en struct")
+                            if sim.tipo != valor.tipo:
+                                if sim.tipo != Type.NULO:
+                                    print("No se puede cambiar el tipo de dato del atributo en struct")
+                                    return
+                                else: sim.tipo = valor.tipo
+                            sim.valor = valor.value
                             return
-                        else: encontrado.tipo = valor.tipo
-                    encontrado.valor = valor.value
+                    print("error, no se encontro atributo del struct")  
+                    return
                 else:
                     print("identificador no es struct")   
             else:

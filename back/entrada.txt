@@ -7,7 +7,36 @@ mutable struct List
     first;
 end;
 
+function insertFirst(list, value)
+    aux = list.first;
+    newNode = Node(value, aux);
+    list.first = newNode;
+end;
+
+
+function insertLast(list, value)
+    aux = list.first;
+    while aux.next != nothing
+        aux = aux.next;
+    end;
+    newNode = Node(value, nothing);
+    aux.next = newNode;
+end;
+
+#temp = List(nothing);
+#lista2 = Node(5,temp);
+#lista3 = Node(4,lista2);
+#println(lista3);
+
 lista = List(nothing);
-lista.first = 4;
-lista.first = lista.first + lista.first;
+insertFirst(lista, 5);
+insertFirst(lista, 4);
+insertFirst(lista, 3);
+insertFirst(lista, 2);
+
+insertLast(lista, 10);
+insertLast(lista, 20);
+insertLast(lista, 30);
+insertLast(lista, 40);
 println(lista);
+

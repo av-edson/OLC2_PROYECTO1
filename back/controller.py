@@ -37,7 +37,6 @@ def analizarEntrada(contenido=None):
     listJson = objToJson(errores)
     #return Regreso(gl.consola,arbol.getGrafico(),listJson)
 
-
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
 ast = parser.parse(contenido)

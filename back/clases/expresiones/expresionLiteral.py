@@ -23,5 +23,8 @@ class Identificador(Expresion):
     def ejecutar(self, enviroment):
         simbolo = enviroment.findVariable(self.identificador)
         if simbolo != None:
-            return Return(simbolo.valor,simbolo.tipo)
+            if simbolo.tipo==Type.STRUCT:
+                return Return(simbolo,Type.STRUCT)
+            else:
+                return Return(simbolo.valor,simbolo.tipo)
         return Return()

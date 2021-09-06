@@ -226,14 +226,14 @@ def p_final_expresion(t):
         t[0] = t[2]
 def p_llamada_nativas(t):
     '''llamada_funcion  :   FFLOAT PARENTESIS_IZQ expresion PARENTESIS_DER
-                        |   DSTRING PARENTESIS_IZQ expresion PARENTESIS_DER
+                        |   FSTRING PARENTESIS_IZQ expresion PARENTESIS_DER
                         |   FTYPEOF PARENTESIS_IZQ expresion PARENTESIS_DER
                         |   FTRUNC PARENTESIS_IZQ DINT64 COMA expresion PARENTESIS_DER
                         |   FPARSE PARENTESIS_IZQ DINT64 COMA expresion PARENTESIS_DER
                         |   FPARSE PARENTESIS_IZQ DFLOAT64 COMA expresion PARENTESIS_DER'''
     if t.slice[1].type=='FFLOAT':
         t[0]=FSimple(t[3],1,t.lineno(1),t.lexpos(1))
-    elif t.slice[1].type=='DSTRING':
+    elif t.slice[1].type=='FSTRING':
         t[0]=FSimple(t[3],2,t.lineno(1),t.lexpos(1))
     elif t.slice[1].type=='FTYPEOF':
         t[0]=FSimple(t[3],3,t.lineno(1),t.lexpos(1))

@@ -27,6 +27,7 @@ reservadas = {
     'trunc':'FTRUNC',
     'float':'FFLOAT',
     'typeof':'FTYPEOF',
+    'string':'FSTRING',
     'push':'FPUSH',
     'pop':'FPOP',
     'length':'FLENGTH',

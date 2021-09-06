@@ -38,8 +38,9 @@ class CicloWhile(Instruccion):
                 if expr.tipo != Type.BOOL:
                     print("espresion no booleana en while")
                     return
-        except:
+        except Exception as e:
             print('Error desconocido en sentencia while')
+            print(str(e))
 
     def validarReturn(self,enviroment:Enviroment):
         padre = enviroment.antecesor

@@ -99,9 +99,14 @@ class Enviroment:
             env = env.antecesor
         return None
             
-    def addVariableStruct(self,identificador,struct):
+    def addVariableStruct(self,identificador,tipoStruct,mut,atributos,alcance=None):
         env:Enviroment = self
-        sim = Simbolo(struct,identificador,Type.STRUCT)
+        sim = Simbolo(None,identificador,Type.STRUCT,tipoStruct,mut)
+        sim.atributos = atributos
+        # quiere decir que es para una funcion
+        if alcance == True:
+            self.variables[identificador]=sim
+            return
         while env != None:
             if identificador in env.variables.keys():
                 env.variables[identificador]=sim

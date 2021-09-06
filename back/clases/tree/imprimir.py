@@ -25,8 +25,9 @@ class Imprimir(Instruccion):
                 print('una de las expresiones el print tiene error')
                 return
             if res.tipo==Type.STRUCT:
-                aux=str(expre.identificador)+":"+str(res.value.tipoStruct)
-                aux+=self._getStruct(res.value.atributos)
+                res = res.value
+                aux=str(expre.identificador)+":"+str(res.tipoStruct.identificador)
+                aux+=self._getStruct(res.atributos)
                 res.value = aux
             lista.append(res)
         if self.tipo==TipoImpresion.PRINT:
@@ -51,6 +52,8 @@ class Imprimir(Instruccion):
         #print(aux)
 
     def _getStruct(self,atributos):
+        if atributos == None:
+            return ""
         contenido = "{"
         for atributo in atributos:
             if atributo.tipo == Type.STRUCT:
