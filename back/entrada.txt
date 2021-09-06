@@ -1,42 +1,118 @@
-mutable struct Node
-    value::Int64;
-    next;
-end;
-
-mutable struct List
-    first;
-end;
-
-function insertFirst(list, value)
-    aux = list.first;
-    newNode = Node(value, aux);
-    list.first = newNode;
-end;
-
-
-function insertLast(list, value)
-    aux = list.first;
-    while aux.next != nothing
-        aux = aux.next;
+function figura1(n::Int64) 
+    i=-3*n/2;
+    while(i<=n)
+        cadenaFigura = "";
+        j=-3*n/2;
+        while(j<=3*n)
+            absolutoi=0.0::Float64;
+            absolutoi = i;
+            absolutoj=0.0::Float64;
+            absolutoj = j;
+            if(i < 0)
+                absolutoi = i * -1;
+            end;
+            if(j < 0)
+                absolutoj = j * -1;
+            end;
+            if ((absolutoi + absolutoj < n) 
+                || ((-n / 2 - i) * (-n / 2 - i) + (n / 2 - j) * (n / 2 - j) <= n * n / 2) 
+                || ((-n / 2 - i) * (-n / 2 - i) + (-n / 2 - j) * (-n / 2 - j) <= n * n / 2))
+                cadenaFigura = cadenaFigura * "* ";
+            else
+                cadenaFigura = cadenaFigura * ". ";
+            end;
+            j=j+1;
+        end;
+        println(cadenaFigura);
+        i=i+1;
     end;
-    newNode = Node(value, nothing);
-    aux.next = newNode;
+    println("Si la figura es un corazón, te aseguro que tendrás un 100 :3");
 end;
 
-#temp = List(nothing);
-#lista2 = Node(5,temp);
-#lista3 = Node(4,lista2);
-#println(lista3);
+figura1(10);
 
-lista = List(nothing);
-insertFirst(lista, 5);
-insertFirst(lista, 4);
-insertFirst(lista, 3);
-insertFirst(lista, 2);
+function factorialIterativo(n::Int64)
+    resultado = 1;
+    for i in 1:n
+        resultado = resultado * i;
+    end;
+    return resultado;
+end;
 
-insertLast(lista, 10);
-insertLast(lista, 20);
-insertLast(lista, 30);
-insertLast(lista, 40);
-println(lista);
+function factorialRecursivo(n::Int64) 
+    if (n == 0) 
+        return 1;
+    end;
+    return (n * factorialRecursivo(n - 1));
+end;
 
+function Principal()
+    println("-----------Factorial Iterativo---------");
+    println("8! = " , factorialIterativo(8));
+    println("-----------Factorial Recursivo---------");
+    println("8! = " , factorialRecursivo(8));
+end;
+
+
+Principal();
+
+function hanoi(num,A,C,B)
+    if (num==1)
+      println("Mueva el bloque " , num , " desde " , A , " hasta  " , C);      
+    else
+        hanoi(num-1,A,B,C);
+      println("Mueva el bloque " , num , " desde " , A , " hasta  " , C);
+        hanoi(num-1,B,C,A);
+    end;
+end;
+ 
+
+function factorial(n::Int64) 
+    if (n == 0)
+        return 1;
+    end;
+    return n * factorial(n - 1);
+end;
+
+
+function fibonacci(n::Int64) 
+    if (n <= 1) 
+        return n;
+    end;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+end;
+
+
+function par(num) 
+    if (num == 0) 
+        return 1;
+    end;
+    return impar(num - 1);
+end;
+
+function impar(num) 
+    if (num == 0) 
+        return 0;
+    end;
+    return par(num - 1);
+end;
+
+println("\n");
+println("Factorial 12: 479001600");
+println(factorial(12));
+println("\n");
+println("Fibonacci 25: 75025");
+println(fibonacci(25));
+println("\n");
+println("Funcion par: 1");
+println(par(250));
+println("\n");
+# println("Ackerman normal 3, 4: 125");
+# println(ackermann(3, 4));
+# println("\n");
+
+n = 5;
+println("\n");
+println("Los clavijas son A B C");
+println("Numero de discos: " , n);
+hanoi(n,'A','C','B');   

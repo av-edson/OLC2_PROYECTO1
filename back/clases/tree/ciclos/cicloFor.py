@@ -33,7 +33,7 @@ class CicloFor(Instruccion):
                     elif ret.tipo != Type.CONTINUEST:
                         return ret
                 inicio+=1
-                entornoInterno.modificar_variable(self.variable,inicio)
+                entornoInterno.modificar_variable(self.variable,inicio,None)
                 ciclo = self.valuarRango(inicio,fin)
         else:
             var = self.expr1.ejecutar(enviroment)
@@ -64,7 +64,7 @@ class CicloFor(Instruccion):
                     inicio+=1
                     ciclo = self.valuarRango(inicio,fin)
                     if ciclo:
-                        entornoInterno.modificar_variable(self.variable,listaCaracteres[inicio-1])
+                        entornoInterno.modificar_variable(self.variable,listaCaracteres[inicio-1],None)
             else:
                 print('expresion invalida para el ciclo for')
 

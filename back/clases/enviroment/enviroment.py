@@ -50,7 +50,7 @@ class Enviroment:
                 self.variables[ide] = nuevo
                 return
             else:
-                self.modificar_variable(ide,valor)
+                self.modificar_variable(ide,valor,nuevo)
                 return
         elif alcanse==2:
             entorno.variables[ide] = nuevo
@@ -58,13 +58,17 @@ class Enviroment:
             entorno = self.getGlobal()
             entorno.variables[ide]=nuevo
 
-    def modificar_variable(self,identificador,valor):
+    def modificar_variable(self,identificador,valor,nuevo):
         env = self
         while env != None:
             if identificador in env.variables.keys():
                 anterior:Simbolo = self.findVariable(identificador)
-                nuevo = Simbolo(valor,anterior.simbolId,anterior.tipo)
-                env.variables[identificador] = nuevo
+                # este es para modificar pero desde el compilador no del codigo de entrada
+                nuevoaux = Simbolo(valor,anterior.simbolId,anterior.tipo)
+                if nuevo != None:
+                    env.variables[identificador] = nuevo
+                else:
+                    env.variables[identificador] = nuevoaux
                 return
             else:
                 env = env.antecesor

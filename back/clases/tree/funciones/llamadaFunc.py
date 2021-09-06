@@ -46,7 +46,7 @@ class LLamadaFuncion(Expresion):
                 print('Funcion no definida o no se encontro')
                 return Return()
         except:
-            print("Error desconocido dentro de la funcion ")
+            print("Error desconocido dentro de la funcion "+str(self.ide))
 
     def validarFuncion(self,func:Funcion,enviroment,lista):
         listaRegreso=[]

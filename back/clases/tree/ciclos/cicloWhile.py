@@ -14,7 +14,7 @@ class CicloWhile(Instruccion):
             if expr.tipo != Type.BOOL:
                 print("espresion no booleana en while")
 
-            entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaELSE lin_"+str(self.line))
+            entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaWHILE lin_"+str(self.line))
             while expr.value:
                 ret=self.bloque.ejecutar(entornoInterno)
                 if ret != None:
