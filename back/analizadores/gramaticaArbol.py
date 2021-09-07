@@ -39,7 +39,9 @@ def p_instruccion(t):
                     |   llamada_funcion PUNTOCOMA
                     |   funcion_return  PUNTOCOMA
                     |   sentencia_control
-                    |   salto_control PUNTOCOMA'''
+                    |   salto_control PUNTOCOMA
+                    |   crear_struct PUNTOCOMA
+                    |   modificar_struct PUNTOCOMA'''
     temp = Nodo("Instruccion")
     pt = Nodo(";")
     temp.ingresarHijo(t[1])
@@ -171,7 +173,8 @@ def p_final_expresion(t):
                         |   CARACTER
                         |   BOOLEANO
                         |   NULO
-                        |   ID'''
+                        |   ID
+                        |   accesoStruct'''
     if len(t) == 4:
         temp = Nodo("agrupacion")
         temp.ingresarHijo(Nodo("("))
@@ -180,13 +183,15 @@ def p_final_expresion(t):
         t[0]=temp
     elif t.slice[1].type == "llamada_funcion":
         t[0]=t[1]
+    elif t.slice[1].type == "accesoStruct":
+        t[0]=t[1]
     else:
         temp= Nodo(str(t[1]))
         t[0]=temp
 
 def p_llamada_nativas(t):
     '''llamada_funcion  :   FFLOAT PARENTESIS_IZQ expresion PARENTESIS_DER
-                        |   DSTRING PARENTESIS_IZQ expresion PARENTESIS_DER
+                        |   FSTRING PARENTESIS_IZQ expresion PARENTESIS_DER
                         |   FTYPEOF PARENTESIS_IZQ expresion PARENTESIS_DER
                         |   FTRUNC PARENTESIS_IZQ DINT64 COMA expresion PARENTESIS_DER
                         |   FPARSE PARENTESIS_IZQ DINT64 COMA expresion PARENTESIS_DER
@@ -374,6 +379,64 @@ def p_sentencia_for(t):
     else:
         temp.ingresarHijo(t[5])
         temp.ingresarHijo(Nodo(t[6]))
+    t[0]=temp
+
+def p_crear_struct(t):
+    '''crear_struct  :   STRUCT ID contenido_struct FIN
+                    |   MUTABLE STRUCT ID contenido_struct FIN'''
+    temp = Nodo("Struct")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(Nodo(t[2]))
+    if len(t)==5:
+        temp.ingresarHijo(t[3])
+        temp.ingresarHijo(Nodo(t[4]))
+    else:
+        temp.ingresarHijo(Nodo(t[3]))
+        temp.ingresarHijo(t[4])
+        temp.ingresarHijo(Nodo(t[5]))
+
+
+def p_contenido_struct(t):
+    '''contenido_struct :   contenido_struct struct_atributo
+                        |   struct_atributo'''
+    temp = Nodo("Atributos Struct")
+    if len(t)==2:
+        temp.ingresarHijo(t[1])
+    else:
+        temp.ingresarHijo(t[1])
+        temp.ingresarHijo(t[2])
+    t[0]=temp
+
+
+def p_atributo_struct(t):
+    '''struct_atributo  :   ID PUNTOCOMA
+                        |   ID DOSPUNTOS DOSPUNTOS tipodato PUNTOCOMA'''
+    temp=Nodo("Atributo Struct")
+    temp.ingresarHijo(Nodo(t[1]))
+    if len(t)==3:
+        temp.ingresarHijo(Nodo(t[2]))
+    else:
+        temp.ingresarHijo(Nodo("::"))
+        temp.ingresarHijo(t[1])
+        temp.ingresarHijo(Nodo(t[5]))
+    t[0]=temp
+
+def p_acceso_struct(t):
+    '''accesoStruct :   ID PUNTO ID'''
+    temp = Nodo("Acceso a Struct")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(Nodo(t[2]))
+    temp.ingresarHijo(Nodo(t[3]))
+    t[0]=temp
+
+def p_modificar_struct(t):
+    '''modificar_struct :   ID PUNTO ID IGUAL expresion'''
+    temp=Nodo("Mod. Struct")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(Nodo(t[2]))
+    temp.ingresarHijo(Nodo(t[3]))
+    temp.ingresarHijo(Nodo(t[4]))
+    temp.ingresarHijo(t[5])
     t[0]=temp
 
 import ply.yacc as yacc

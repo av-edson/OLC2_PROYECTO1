@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
@@ -41,6 +43,8 @@ class ExpresionRelacional(Expresion):
                 return self.diferente(izq,der)
         except:
             print("-----Error en la expresion relacional "+str(self.line))
+            gl = enviroment.getGlobal()
+            gl.listaErrores.append(Error("error en la expresion relacional",self.line,self.column,time.strftime("%c")))
             return Return()
         
     def mayor(self,iz,der):

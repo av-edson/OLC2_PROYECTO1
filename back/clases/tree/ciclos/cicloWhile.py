@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.enviroment.enviroment import Enviroment
 from clases.abstract.instruccion import Instruccion
 from clases.abstract.type import Return, Type
@@ -9,11 +11,13 @@ class CicloWhile(Instruccion):
         self.bloque=bloque
     
     def ejecutar(self, enviroment):
+        gl:Enviroment = enviroment.getGlobal()
         try:
             expr:Return = self.condicion.ejecutar(enviroment)
             if expr.tipo != Type.BOOL:
                 print("espresion no booleana en while")
-
+                gl.listaErrores.append(Error("espresion no booleana en while",self.line,self.column,time.strftime("%c")))
+                return
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaWHILE lin_"+str(self.line))
             while expr.value:
                 ret=self.bloque.ejecutar(entornoInterno)
@@ -24,6 +28,7 @@ class CicloWhile(Instruccion):
                         expr = self.condicion.ejecutar(enviroment)
                         if expr.tipo != Type.BOOL:
                             print("espresion no booleana en while")
+                            gl.listaErrores.append(Error("espresion no booleana en while",self.line,self.column,time.strftime("%c")))
                             return
                         continue
                     elif ret.tipo==Type.RETURNST:
@@ -32,14 +37,17 @@ class CicloWhile(Instruccion):
                         if self.validarReturn(entornoInterno):
                             return ret
                         else:
-                            print("return no valido ")
+                            print("return no valido")
+                            gl.listaErrores.append(Error("return no valido",self.line,self.column,time.strftime("%c")))
                             return
                 expr = self.condicion.ejecutar(enviroment)
                 if expr.tipo != Type.BOOL:
                     print("espresion no booleana en while")
+                    gl.listaErrores.append(Error("espresion no booleana en while",self.line,self.column,time.strftime("%c")))
                     return
         except Exception as e:
             print('Error desconocido en sentencia while')
+            gl.listaErrores.append(Error("Error desconocido en sentencia while",self.line,self.column,time.strftime("%c")))
             print(str(e))
 
     def validarReturn(self,enviroment:Enviroment):

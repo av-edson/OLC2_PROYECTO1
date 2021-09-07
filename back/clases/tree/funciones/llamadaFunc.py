@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.tree.bloqueInstrucciones import BloqueInstrucciones
 from clases.tree.funciones.funcion import Funcion
 from clases.tree.funciones.parametro import Parametro
@@ -13,6 +15,7 @@ class LLamadaFuncion(Expresion):
         self.ide = identificador
     
     def ejecutar(self, enviroment):
+        gl:Enviroment = enviroment.getGlobal()
         try:
             func:Funcion = enviroment.get_fuction(self.ide)
             if func != None:
@@ -44,17 +47,21 @@ class LLamadaFuncion(Expresion):
                     return Return()
             else:
                 print('Funcion no definida o no se encontro')
+                gl.listaErrores.append(Error("Funcion no definida o no se encontro",self.line,self.column,time.strftime("%c")))
                 return Return()
         except:
-            print("Error desconocido dentro de la funcion "+str(self.ide))
+            print("Error desconocido dentro de la funcion"+str(self.ide))
+            gl.listaErrores.append(Error("Error desconocido dentro de la funcion",self.line,self.column,time.strftime("%c")))
 
     def validarFuncion(self,func:Funcion,enviroment,lista):
         listaRegreso=[]
+        gl:Enviroment = enviroment.getGlobal()
         for expre in lista:
             val:Return = expre.ejecutar(enviroment)
             # si una expresion tiene error se sale del programa
             if val.tipo == Type.UNDEFINED:
                 print('Una expresion que envio como parametro contiene error en la funcion')
+                gl.listaErrores.append(Error("Una expresion que envio como parametro contiene error en la funcion",self.line,self.column,time.strftime("%c")))
                 return None
             else:
                 listaRegreso.append(val)
@@ -62,6 +69,7 @@ class LLamadaFuncion(Expresion):
         if len(func.params) != len(listaRegreso):
             # si tienen numero diferente de parametros
             print('numero de parametros que envio no coicide con el definido')
+            gl.listaErrores.append(Error("Numero de parametros que envio no coicide con el definido",self.line,self.column,time.strftime("%c")))
             return None
         # validando tipo de dato
         for i in range(len(lista)):
@@ -70,5 +78,6 @@ class LLamadaFuncion(Expresion):
             if expr.tipo != param.tipoDato:
                 if param.tipoDato != None:
                     print('Un tipo de dato no coicide')
+                    gl.listaErrores.append(Error("Un tipo de dato no coicide",self.line,self.column,time.strftime("%c")))
                     return None
         return listaRegreso

@@ -1,7 +1,7 @@
 from clases.nodo import Nodo
 from clases.error import Error
 from analizadores.gramatica import parser
-#from analizadores.gramaticaArbol import parser2
+from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
 from analizadores.lexer import errores
 
@@ -23,35 +23,39 @@ def objToJson(obj):
     return lista
 
 def analizarEntrada(contenido=None):
-    #arbol:Nodo= parser2.parse(contenido)
-    global errores
-    errores.clear()
-    ast = parser.parse(contenido)
-    gl = Enviroment(None,"Global")
     try:
-        for instruccion in ast:
-            if instruccion != None:
-                d=instruccion.ejecutar(gl)
+        #arbol:Nodo= parser2.parse(contenido)
+        global errores
+        errores.clear()
+        ast = parser.parse(contenido)
+        gl = Enviroment(None,"Global")
+        try:
+            for instruccion in ast:
+                if instruccion != None:
+                    d=instruccion.ejecutar(gl)
+        except:
+            print("Error al ejecutar instrucciones")
+            return Regreso("Error inesperado ocurrio","","")
+        listJson = objToJson(errores)
+        #return Regreso(gl.consola,arbol.getGrafico(),listJson)
     except:
-        print("Error al ejecutar instrucciones")
-    listJson = objToJson(errores)
-    #return Regreso(gl.consola,arbol.getGrafico(),listJson)
+        return Regreso("Error inesperado ocurrio","","")
 
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
-ast = parser.parse(contenido)
+#ast = parser.parse(contenido)
 gl = Enviroment(None,"Global")
-#arbol:Nodo = parser2.parse(contenido)
-try:
-    for instruccion in ast:
-        if instruccion != None:
-            d=instruccion.ejecutar(gl)
-        x = 4
-except:
-    print("Error al ejecutar instrucciones")
+arbol:Nodo = parser2.parse(contenido)
+#try:
+#    for instruccion in ast:
+#        if instruccion != None:
+#            d=instruccion.ejecutar(gl)
+#        x = 4
+#except:
+#    print("Error al ejecutar instrucciones")
 f.close()
-print(gl.consola)
-#print(arbol.getGrafico())
+#print(gl.consola)
+print(arbol.getGrafico())
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
     #    print(str(aux.simbolId)+" "+str(aux.valor)+" "+str(aux.tipo))

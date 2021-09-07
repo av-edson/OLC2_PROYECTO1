@@ -40,8 +40,8 @@ class FSimple(Expresion):
                 return Return()
         except:
             gl:Enviroment = enviroment.getGlobal()
-            gl.listaErrores.append(Error("error en una funcion nativa ",self.line,self.column,time.strftime("%c")))
-            print('error en una funcion '+str(self.line))
+            gl.listaErrores.append(Error("error en una funcion nativa",self.line,self.column,time.strftime("%c")))
+            print('error en una funcion nativa '+str(self.line))
             return Return()
     
     def f_float(self,num):

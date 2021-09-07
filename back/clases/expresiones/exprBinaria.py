@@ -1,4 +1,6 @@
 #from clases.enviroment.simbolo import Simbolo
+import time
+from clases.error import Error
 from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
@@ -22,6 +24,8 @@ class ExpresionBinaria(Expresion):
         self.derecho=derecho
     
     def ejecutar(self, enviroment):
+        gl = enviroment.getGlobal()
+        
         izquierdo = self.izquierdo.ejecutar(enviroment)
         derecho = self.derecho.ejecutar(enviroment)
 
@@ -33,7 +37,7 @@ class ExpresionBinaria(Expresion):
             elif self.tipo==OperacionesBinarias.MULTIPLICACION:
                 regreso=self.multiplicacion(izquierdo,derecho)
             elif self.tipo==OperacionesBinarias.DIVISION:
-                regreso=self.division(izquierdo,derecho)
+                regreso=self.division(izquierdo,derecho,gl)
             elif self.tipo==OperacionesBinarias.POTENCIA:
                 regreso=self.potencia(izquierdo,derecho)
             elif self.tipo==OperacionesBinarias.MODULO:
@@ -42,7 +46,7 @@ class ExpresionBinaria(Expresion):
                 return Return()
         except Exception:
             print("--------Error en la operacion binaria------")
-        
+            gl.listaErrores.append(Error("Error en la operacion binaria",self.line,self.column,time.strftime("%c")))
         return regreso
 
     def suma(self,iz,der):
@@ -94,7 +98,7 @@ class ExpresionBinaria(Expresion):
             regreso.value = iz.value*der.value
             regreso.tipo=Type.INT
         return regreso
-    def division(self,iz,der):
+    def division(self,iz,der,gl):
         if not(iz.tipo==Type.INT or iz.tipo==Type.FLOAT):
             return Return(0,Type.UNDEFINED)
         if not(der.tipo==Type.INT or der.tipo==Type.FLOAT):
@@ -102,6 +106,7 @@ class ExpresionBinaria(Expresion):
         regreso = Return()
         if der.value == 0:
             print('------division por cero----')
+            gl.listaErrores.append(Error("division por cero no valida",self.line,self.column,time.strftime("%c")))
             return regreso
         if iz.tipo == Type.FLOAT or der.tipo == Type.FLOAT:
             regreso.value = float(iz.value) / float(der.value)

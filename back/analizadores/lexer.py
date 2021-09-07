@@ -54,10 +54,6 @@ tokens = [
     # AGRUPACION
     'PARENTESIS_IZQ',
     'PARENTESIS_DER',
-    'CORCHETE_IZQ',
-    'CORCHETE_DER',
-    'LLAVE_ABRE',
-    'LLAVE_CIERRA',
     # ARITMETICAS
     'SUMA',
     'RESTA',
@@ -94,10 +90,6 @@ tokens = [
 
 t_PARENTESIS_IZQ = r'\('
 t_PARENTESIS_DER = r'\)'
-t_CORCHETE_IZQ = r'\['
-t_CORCHETE_DER = r'\]'
-t_LLAVE_ABRE = r'\{'
-t_LLAVE_CIERRA = r'\}'
 t_SUMA = r'\+'
 t_RESTA = r'\-'
 t_MULTI = r'\*'

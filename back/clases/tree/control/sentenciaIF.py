@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.abstract.instruccion import Instruccion
 from clases.enviroment.enviroment import Enviroment
 from clases.tree.control.sentenciaELIF import SentenciaELIF
@@ -14,8 +16,10 @@ class SentenciaIF(Instruccion):
     
     def ejecutar(self, enviroment):
         exp:Return = self.condicion.ejecutar(enviroment)
+        gl:Enviroment = enviroment.getGlobal()
         if exp.tipo != Type.BOOL:
             print('Error en la expresion del if')
+            gl.listaErrores.append(Error("Error en la expresion a evaluar del if",self.line,self.column,time.strftime("%c")))
             return
         if exp.value == True:
             entornoInterno:Enviroment = Enviroment(enviroment,"SentenciaIF lin_"+str(self.line))

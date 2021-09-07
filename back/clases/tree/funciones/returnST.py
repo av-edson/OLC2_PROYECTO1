@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.abstract.instruccion import Instruccion
 from clases.abstract.type import *
 
@@ -17,5 +19,7 @@ class ReturnFunc(Instruccion):
             else:
                 return Return(0,Type.RETURNST)
         except:
+            gl = enviroment.getGlobal()
+            gl.listaErrores.append(Error("Error en el return",self.line,self.column,time.strftime("%c")))
             print("Error en el return"+str(self.line))
             return Return()

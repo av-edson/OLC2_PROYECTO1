@@ -76,6 +76,7 @@ class Enviroment:
     def add_function(self,identificador,funcion):
         if identificador in self.funciones.keys():
             print('No se admiten funciones repetidas')
+            
         else:
             self.funciones[identificador] = funcion 
 

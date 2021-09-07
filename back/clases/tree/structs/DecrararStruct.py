@@ -14,22 +14,27 @@ class DeclararStruct(Instruccion):
 
     def ejecutar(self, enviroment):
         struct = enviroment.getStruct(self.tipoStruct)
+        gl = enviroment.getGlobal()
         if struct == None:
             print("No se encontro struct definida")
+            gl.listaErrores.append(Error("No se encontro una struct definida",self.line,self.column,time.strftime("%c")))
             return Return()
         listaExpresiones = self.evaluarExpresiones(self._lista,enviroment)
         # evaluando las expresiones con el tipo expresion del struct
         if len(listaExpresiones) != len(struct.atributos):
             print("en numero de parametros no coicide con la struct definida")
+            gl.listaErrores.append(Error("Numero de parametros no coicide con la struct definida",self.line,self.column,time.strftime("%c")))
             return
         aux=[]
         for i in range(len(listaExpresiones)):
             if listaExpresiones[i].tipo != struct.atributos[i].tipo:
                 if struct.atributos[i].tipo != None and struct.atributos[i].tipo != Type.NULO:
                     print("uno de los tipos de datos del struct no coincide con el declarado")
+                    gl.listaErrores.append(Error("Uno de los tipos de datos del struct no coicide con el declarado",self.line,self.column,time.strftime("%c")))
                     return Return()
                 elif listaExpresiones[i].tipo == Type.UNDEFINED:
                     print("Error en uno de los parametros para declarar la struct")
+                    gl.listaErrores.append(Error("Error en uno de los parametro spara declarar la struct",self.line,self.column,time.strftime("%c")))
                     return Return()
             simboloAux = Simbolo(listaExpresiones[i].value,struct.atributos[i].simbolId,listaExpresiones[i].tipo)
             aux.append(simboloAux)

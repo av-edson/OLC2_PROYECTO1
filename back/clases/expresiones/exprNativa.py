@@ -1,3 +1,5 @@
+import time
+from clases.error import Error
 from clases.abstract.expresion import Expresion
 #from clases.enviroment.enviroment import Enviroment
 from clases.abstract.type import *
@@ -22,6 +24,7 @@ class ExpresionNativa(Expresion):
         self.base=base
     
     def ejecutar(self,enviroment):
+        gl = enviroment.getGlobal()
         expre = self.content.ejecutar(enviroment)
         if self.base != None:
             base = self.base.ejecutar(enviroment)
@@ -39,11 +42,12 @@ class ExpresionNativa(Expresion):
             elif self.tipo==OpeNativas.RAIZ:
                 return self.raiz(expre)
             elif self.tipo==OpeNativas.UPER:
-                return self.uper(expre)
+                return self.uper(expre,enviroment)
             else:
-                return self.lower(expre)
+                return self.lower(expre,enviroment)
         except:
             print('----Error al ejecutar funcion nativa')
+            gl.listaErrores.append(Error("error al ejecutar funcion nativa",self.line,self.column,time.strftime("%c")))
             return Return()
     
     def log_comun(self,expre):
@@ -114,15 +118,19 @@ class ExpresionNativa(Expresion):
             return regreso
         regreso.tipo=Type.FLOAT
         return regreso
-    def uper(self,expre:Return):
+    def uper(self,expre:Return,enviroment):
         if not(expre.tipo==Type.STRING or expre.tipo==Type.CHAR):
             print('upper solo de cadenas o caracteres')
+            gl = enviroment.getGlobal()
+            gl.listaErrores.append(Error("upper solo de cadenas o caracteres",self.line,self.column,time.strftime("%c")))
             return Return()
         nuevoValor = str(expre.value).upper()
         return Return(nuevoValor,Type.STRING)
-    def lower(self,expre):
+    def lower(self,expre,enviroment):
         if not(expre.tipo==Type.STRING or expre.tipo==Type.CHAR):
             print('lower solo de cadenas o caracteres')
+            gl = enviroment.getGlobal()
+            gl.listaErrores.append(Error("lower solo de cadenas o caracteres",self.line,self.column,time.strftime("%c")))
             return Return()
         nuevoValor = str(expre.value).lower()
         return Return(nuevoValor,Type.STRING)
