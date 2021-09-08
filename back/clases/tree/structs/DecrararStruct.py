@@ -39,7 +39,7 @@ class DeclararStruct(Instruccion):
             simboloAux = Simbolo(listaExpresiones[i].value,struct.atributos[i].simbolId,listaExpresiones[i].tipo)
             aux.append(simboloAux)
         mutable = struct.mutable
-        simboloStruct = Simbolo(aux,None,Type.STRUCT,struct,mutable)
+        simboloStruct = Simbolo(aux,None,Type.STRUCT,self.line,self.column,struct,mutable)
         return Return(simboloStruct,Type.STRUCT)
 
     def evaluarExpresiones(self,lista,enviroment):

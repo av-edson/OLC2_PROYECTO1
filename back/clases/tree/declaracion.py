@@ -49,7 +49,7 @@ class Asignacion(Instruccion):
                 struct = reg.tipoStruct
                 env.addVariableStruct(self.ide,struct,struct.mutable,atributos)
                 return
-            env.add_variable(self.ide,reg.value,tipoAux,self.alcance)
+            env.add_variable(self.ide,reg.value,tipoAux,self.alcance,self.line,self.column)
         except:
             gl.listaErrores.append(Error("Error inesperado en declaracion "+str(self.ide),self.line,self.column,time.strftime("%c")))
 
@@ -67,4 +67,4 @@ class DeclaracionGloLoc(Instruccion):
     def ejecutar(self, enviroment):
         env:Enviroment = enviroment
         var:Simbolo = env.findVariable(self.ide)
-        env.add_variable(self.ide,var.valor,var.tipo,self.alcance)
+        env.add_variable(self.ide,var.valor,var.tipo,self.alcance,self.line,self.column)

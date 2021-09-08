@@ -25,7 +25,7 @@ class CicloFor(Instruccion):
                 gl.listaErrores.append(Error("error en el rango del ciclo for",self.line,self.column,time.strftime("%c")))
                 return
             entornoInterno:Enviroment = Enviroment(enviroment,"ciclo for")
-            entornoInterno.add_variable(self.variable,inicio.value,Type.INT,2)
+            entornoInterno.add_variable(self.variable,inicio.value,Type.INT,2,self.line,self.column)
             inicio = inicio.value
             fin = fin.value
             ciclo = self.valuarRango(entornoInterno.findVariable(self.variable).valor,fin)
@@ -49,7 +49,7 @@ class CicloFor(Instruccion):
                 inicio = 1
                 fin = len(listaCaracteres)
                 entornoInterno:Enviroment = Enviroment(enviroment,"ciclo for")
-                entornoInterno.add_variable(self.variable,listaCaracteres[inicio-1],Type.STRING,2)
+                entornoInterno.add_variable(self.variable,listaCaracteres[inicio-1],Type.STRING,2,self.line,self.column)
                 ciclo = self.valuarRango(inicio,fin)
                 while ciclo:
                     ret =self.bloque.ejecutar(entornoInterno)

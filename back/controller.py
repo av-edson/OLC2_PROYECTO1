@@ -1,7 +1,7 @@
 from clases.nodo import Nodo
 from clases.error import Error
 from analizadores.gramatica import parser
-from analizadores.gramaticaArbol import parser2
+#from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
 from analizadores.lexer import errores
 
@@ -43,19 +43,23 @@ def analizarEntrada(contenido=None):
 
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
-#ast = parser.parse(contenido)
+ast = parser.parse(contenido)
 gl = Enviroment(None,"Global")
-arbol:Nodo = parser2.parse(contenido)
-#try:
-#    for instruccion in ast:
-#        if instruccion != None:
-#            d=instruccion.ejecutar(gl)
-#        x = 4
-#except:
-#    print("Error al ejecutar instrucciones")
+#arbol:Nodo = parser2.parse(contenido)
+try:
+    for instruccion in ast:
+        if instruccion != None:
+            d=instruccion.ejecutar(gl)
+        x = 4
+    gl.addVariable_TablaSimbolos()
+except:
+    print("Error al ejecutar instrucciones")
 f.close()
-#print(gl.consola)
-print(arbol.getGrafico())
+print(gl.consola)
+for var in gl.listaSimbolos:
+    var = gl.listaSimbolos[var]
+    print(var.ambito+" - "+var.nombre+" - "+var.tipo+" - "+var.valor)
+#print(arbol.getGrafico())
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
     #    print(str(aux.simbolId)+" "+str(aux.valor)+" "+str(aux.tipo))

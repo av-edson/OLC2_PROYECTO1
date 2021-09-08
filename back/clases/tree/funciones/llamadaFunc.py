@@ -31,7 +31,7 @@ class LLamadaFuncion(Expresion):
                             if p.tipoDato == None:
                                 p.tipoDato = e.tipo
                             if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
-                                entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2)
+                                entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2,self.line,self.column)
                             else:
                                 # agregando variable local struct
                                 e = e.value

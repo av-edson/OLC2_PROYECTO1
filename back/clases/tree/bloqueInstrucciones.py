@@ -12,8 +12,10 @@ class BloqueInstrucciones(Instruccion):
         try:
             for instruccion in self.listaInstrucciones:
                 regreso = instruccion.ejecutar(enviroment)
-            if regreso != None:
-                return regreso
+                if regreso != None:
+                    return regreso
+            # agregar a tabla de simbolos xd
+            enviroment.addVariable_TablaSimbolos()
         except:
             gl = enviroment.getGlobal()
             gl.listaErrores.append(Error("Error inesperado en instruccion"+str(self.ide),self.line,self.column,time.strftime("%c")))

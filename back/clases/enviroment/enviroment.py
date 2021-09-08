@@ -1,3 +1,4 @@
+from clases.simbol import SimbolVariable
 from clases.enviroment.simbolo import *
 
 class Enviroment:
@@ -10,6 +11,7 @@ class Enviroment:
         if antecesor == None:
             self.consola=""
             self.listaErrores=[]
+            self.listaSimbolos = {}
 
     def getGlobal(self):
         entorno = self
@@ -37,14 +39,14 @@ class Enviroment:
             return entorno.variables[idVariable]
         return None
     
-    def add_variable(self,ide,valor,tipo,alcanse):
+    def add_variable(self,ide,valor,tipo,alcanse,fila=None,columna=None):
         '''
             alcance = 1 -> global \n
             alcance = 2 -> local \n
             alcance = 3 -> normal\n
         '''
         entorno = self
-        nuevo = Simbolo(valor,ide,tipo)
+        nuevo = Simbolo(valor,ide,tipo,fila,columna)
         if alcanse == 3:
             if self.findVariable(ide) == None:
                 self.variables[ide] = nuevo
@@ -64,7 +66,7 @@ class Enviroment:
             if identificador in env.variables.keys():
                 anterior:Simbolo = self.findVariable(identificador)
                 # este es para modificar pero desde el compilador no del codigo de entrada
-                nuevoaux = Simbolo(valor,anterior.simbolId,anterior.tipo)
+                nuevoaux = Simbolo(valor,anterior.simbolId,anterior.tipo,anterior.fila,anterior.columna)
                 if nuevo != None:
                     env.variables[identificador] = nuevo
                 else:
@@ -106,7 +108,7 @@ class Enviroment:
             
     def addVariableStruct(self,identificador,tipoStruct,mut,atributos,alcance=None):
         env:Enviroment = self
-        sim = Simbolo(None,identificador,Type.STRUCT,tipoStruct,mut)
+        sim = Simbolo(None,identificador,Type.STRUCT,None,None,tipoStruct,mut)
         sim.atributos = atributos
         # quiere decir que es para una funcion
         if alcance == True:
@@ -118,3 +120,27 @@ class Enviroment:
                 return
             env = env.antecesor
         self.variables[identificador]=sim
+
+    def addVariable_TablaSimbolos(self):
+        gl = self.getGlobal()
+        for var in self.variables:
+            var = self.variables[var]
+            id = str(var.simbolId)+"_"+str(self.nombre)
+            valor = var.valor
+            if var.tipo == Type.STRUCT:
+                valor = ""
+                for atr in var.atributos:
+                    valor+=str(atr.simbolId)+","
+
+            temp = SimbolVariable(var.simbolId,var.tipo,valor,self.nombre,var.fila,var.columna)
+            gl.listaSimbolos[id] = temp
+        for fun in self.funciones:
+            fun = self.funciones[fun]
+            id = str(fun.ide)+"_"+str(self.nombre)
+            parametros=""
+            for param in fun.params:
+                parametros+=str(param.identificador)+","
+            temp = SimbolVariable(fun.ide,"Funcion",parametros,self.nombre,fun.line,fun.column)
+            gl.listaSimbolos[id]=temp
+            
+        
