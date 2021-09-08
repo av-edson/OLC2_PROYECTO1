@@ -46,6 +46,7 @@ contenido = f.read()
 ast = parser.parse(contenido)
 gl = Enviroment(None,"Global")
 #arbol:Nodo = parser2.parse(contenido)
+
 try:
     for instruccion in ast:
         if instruccion != None:

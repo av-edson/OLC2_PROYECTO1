@@ -30,6 +30,11 @@ class Imprimir(Instruccion):
                     aux=str(expre.identificador)+":"+str(res.tipoStruct.identificador)
                     aux+=self._getStruct(res.atributos)
                     res.value = aux
+                if res.tipo==Type.ARRAY:
+                    res = res.value
+                    aux = str(expre.identificador)
+                    aux+=self._getArray(res.value,enviroment)
+                    res.value=aux
                 lista.append(res)
             if self.tipo==TipoImpresion.PRINT:
                 self.imprimir_simple(lista,enviroment)
@@ -66,3 +71,14 @@ class Imprimir(Instruccion):
                 contenido+=str(atributo.simbolId)+":"+str(atributo.valor)+","
         contenido+="}"
         return contenido
+    
+    def _getArray(self,lista,enviroment):
+        cont = "["
+        for ex in lista:
+            ex = ex.ejecutar(enviroment)
+            if ex.tipo == Type.ARRAY:
+                cont+=self._getArray(ex.value,enviroment)
+            else:
+                cont+=str(ex.value)+","
+        cont+="]"
+        return cont

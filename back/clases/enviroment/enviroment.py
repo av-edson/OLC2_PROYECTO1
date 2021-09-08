@@ -131,7 +131,8 @@ class Enviroment:
                 valor = ""
                 for atr in var.atributos:
                     valor+=str(atr.simbolId)+","
-
+            if var.tipo == Type.ARRAY:
+                valor = "[]"
             temp = SimbolVariable(var.simbolId,var.tipo,valor,self.nombre,var.fila,var.columna)
             gl.listaSimbolos[id] = temp
         for fun in self.funciones:
@@ -143,4 +144,3 @@ class Enviroment:
             temp = SimbolVariable(fun.ide,"Funcion",parametros,self.nombre,fun.line,fun.column)
             gl.listaSimbolos[id]=temp
             
-        

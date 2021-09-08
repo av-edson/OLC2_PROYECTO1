@@ -54,6 +54,8 @@ tokens = [
     # AGRUPACION
     'PARENTESIS_IZQ',
     'PARENTESIS_DER',
+    'COR_ABRE',
+    'COR_CIERRA',
     # ARITMETICAS
     'SUMA',
     'RESTA',
@@ -110,6 +112,8 @@ t_PUNTOCOMA = r'\;'
 t_COMA = r'\,'
 t_DOSPUNTOS = r'\:'
 t_PUNTO  = r'\.'
+t_COR_ABRE = r'\['
+t_COR_CIERRA = r'\]'
 
 
 #decimal

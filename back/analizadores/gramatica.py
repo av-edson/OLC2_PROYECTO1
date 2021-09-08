@@ -1,3 +1,5 @@
+from clases.tree.arreglos.accesoArreglo import AccesoArreglo
+from clases.tree.arreglos.declaracionArreglo import DeclaracionArreglo
 from clases.tree.structs.ModificarStruct import ModificarStruct
 from clases.expresiones.accesoStruct import AccesoStruct
 from clases.tree.structs.CrearStruct import CrearStruct
@@ -54,7 +56,8 @@ def p_instruccion(t):
                     |   sentencia_control
                     |   salto_control PUNTOCOMA
                     |   crear_struct PUNTOCOMA
-                    |   modificar_struct PUNTOCOMA'''
+                    |   modificar_struct PUNTOCOMA
+                    |   declarar_arr    PUNTOCOMA'''
     t[0]=t[1]
 def p_instruccion_error(t):
     '''instruccion  :   error PUNTOCOMA'''
@@ -201,7 +204,9 @@ def p_final_expresion(t):
                         |   BOOLEANO
                         |   NULO
                         |   ID
-                        |   accesoStruct'''
+                        |   accesoStruct
+                        |   accesoArreglo
+                        |   lista_array'''
     if len(t) == 2:
         if t.slice[1].type == "ENTERO":
             t[0] = ExpresionLiteral(Type.INT,int(t[1]),t.lineno(1),t.lexpos(0))
@@ -396,6 +401,27 @@ def p_acceso_struct(t):
 def p_modificar_struct(t):
     '''modificar_struct :   ID PUNTO ID IGUAL expresion'''
     t[0]=ModificarStruct(t[1],t[3],t[5],t.lineno(1),t.lexpos(1))
+
+def p_declarar_arr(t):
+    '''declarar_arr :   ID IGUAL lista_array'''
+    t[0]=DeclaracionArreglo(t[1],t[3],t.lineno(1),t.lexpos(1))
+
+def p_lista_array(t):
+    '''lista_array  : COR_ABRE lista_expresiones COR_CIERRA'''
+    t[0]=ExpresionLiteral(Type.ARRAY,t[2],t.lineno(1),t.lexpos(0))
+
+def p_accesoArreglo(t):
+    '''accesoArreglo    :   ID listaAcceso_arreglo'''
+    t[0]=AccesoArreglo(t[1],t[2],t.lineno(1),t.lexpos(1))
+
+def p_listaAcceso_arreglo(t):
+    '''listaAcceso_arreglo  :   listaAcceso_arreglo COR_ABRE expresion COR_CIERRA
+                            |   COR_ABRE expresion COR_CIERRA'''
+    if len(t)==4:
+        t[0] = [t[2]]
+    else:
+        t[1].append(t[3])
+        t[0]=t[1]
 
 import ply.yacc as yacc
 parser = yacc.yacc()

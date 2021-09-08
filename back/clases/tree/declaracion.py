@@ -1,3 +1,4 @@
+from clases.tree.arreglos.declaracionArreglo import DeclaracionArreglo
 import time
 from clases.error import Error
 from clases.abstract.instruccion import Instruccion
@@ -29,9 +30,12 @@ class Asignacion(Instruccion):
                 return
             # validar el tipo de dato dentro de la expresion a asignar
             t = reg.tipo
-            if (t==Type.ARRAY or t==Type.UNDEFINED or t==Type.RETURNST or t==Type.BREACKST or t==Type.CONTINUEST): 
+            if (t==Type.RETURNST or t==Type.BREACKST or t==Type.CONTINUEST): 
                 print('error en la declaracion de la variable')
                 gl.listaErrores.append(Error("Error en la declaracion de la variable"+str(self.ide),self.line,self.column,time.strftime("%c")))
+                return
+            if t==Type.ARRAY:
+                env.add_variable(self.ide,reg,Type.ARRAY,3,self.line,self.column)
                 return
             # asignar tipo de variable si no tiene
             tipoAux = None
@@ -43,6 +47,7 @@ class Asignacion(Instruccion):
                     gl.listaErrores.append(Error("Expresion y tipo de dato en asignacion no coiciden "+str(self.ide),self.line,self.column,time.strftime("%c")))
                     return
                 tipoAux = self.tipo
+                
             if tipoAux == Type.STRUCT:
                 reg = reg.value
                 atributos = reg.valor
