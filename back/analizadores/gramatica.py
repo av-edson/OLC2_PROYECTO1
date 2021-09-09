@@ -1,3 +1,4 @@
+from clases.tree.arreglos.modificarArreglo import ModificarArreglo
 from clases.tree.arreglos.accesoArreglo import AccesoArreglo
 from clases.tree.arreglos.declaracionArreglo import DeclaracionArreglo
 from clases.tree.structs.ModificarStruct import ModificarStruct
@@ -57,7 +58,8 @@ def p_instruccion(t):
                     |   salto_control PUNTOCOMA
                     |   crear_struct PUNTOCOMA
                     |   modificar_struct PUNTOCOMA
-                    |   declarar_arr    PUNTOCOMA'''
+                    |   declarar_arr    PUNTOCOMA
+                    |   modificar_arreglo PUNTOCOMA'''
     t[0]=t[1]
 def p_instruccion_error(t):
     '''instruccion  :   error PUNTOCOMA'''
@@ -416,12 +418,29 @@ def p_accesoArreglo(t):
 
 def p_listaAcceso_arreglo(t):
     '''listaAcceso_arreglo  :   listaAcceso_arreglo COR_ABRE expresion COR_CIERRA
-                            |   COR_ABRE expresion COR_CIERRA'''
+                            |   COR_ABRE expresion COR_CIERRA
+                            |   COR_ABRE expresion DOSPUNTOS expresion COR_CIERRA
+                            |   listaAcceso_arreglo COR_ABRE expresion DOSPUNTOS expresion COR_CIERRA'''
     if len(t)==4:
         t[0] = [t[2]]
+    elif len(t)==6:
+        temp = []
+        temp.append(t[2])
+        temp.append(t[4])
+        t[0]=[temp]
+    elif len(t)==7:
+        temp = []
+        temp.append(t[3])
+        temp.append(t[5])
+        t[1].append(temp)
+        t[0]=t[1]
     else:
         t[1].append(t[3])
         t[0]=t[1]
+
+def p_modificar_arreglo(t):
+    '''modificar_arreglo    :   ID listaAcceso_arreglo IGUAL expresion'''
+    t[0]=ModificarArreglo(t[1],t[2],t[4],t.lineno(1),t.lexpos(1))
 
 import ply.yacc as yacc
 parser = yacc.yacc()

@@ -40,7 +40,6 @@ def analizarEntrada(contenido=None):
         #return Regreso(gl.consola,arbol.getGrafico(),listJson)
     except:
         return Regreso("Error inesperado ocurrio","","")
-
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
 ast = parser.parse(contenido)

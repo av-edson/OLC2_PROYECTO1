@@ -1,4 +1,5 @@
 import time
+import copy
 from clases.error import Error
 from clases.enviroment.enviroment import Enviroment
 from clases.abstract.instruccion import Instruccion
@@ -31,10 +32,11 @@ class Imprimir(Instruccion):
                     aux+=self._getStruct(res.atributos)
                     res.value = aux
                 if res.tipo==Type.ARRAY:
-                    res = res.value
+                    res = copy.copy(res.value)
                     aux = str(expre.identificador)
-                    aux+=self._getArray(res.value,enviroment)
-                    res.value=aux
+                    aux+=self._getArray(res,enviroment)[:-1]
+                    lista.append(Return(aux,Type.STRING))
+                    continue
                 lista.append(res)
             if self.tipo==TipoImpresion.PRINT:
                 self.imprimir_simple(lista,enviroment)
@@ -80,5 +82,5 @@ class Imprimir(Instruccion):
                 cont+=self._getArray(ex.value,enviroment)
             else:
                 cont+=str(ex.value)+","
-        cont+="]"
+        cont+="],"
         return cont

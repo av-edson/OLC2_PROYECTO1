@@ -21,7 +21,9 @@ class AccesoStruct(Expresion):
                     if sim.simbolId == self.atributo:
                         if sim.tipo == Type.STRUCT:
                             sim = sim.valor
-                            return Return(Simbolo(sim.atributos,sim.simbolId,sim.tipo,None,None,sim.tipoStruct,sim.tipoStruct.mutable),Type.STRUCT)
+                            st = Simbolo(sim.atributos,sim.simbolId,sim.tipo,None,None,sim.tipoStruct,sim.tipoStruct.mutable)
+                            st.atributos = sim.atributos
+                            return Return(st,Type.STRUCT)
                         return Return(sim.valor,sim.tipo)
             print("no es de tipo estruct la variable a la que quiere acceder")
             gl.listaErrores.append(Error("no es de tipo estruct la variable a la que quiere acceder",self.line,self.column,time.strftime("%c")))
