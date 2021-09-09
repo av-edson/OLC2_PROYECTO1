@@ -138,7 +138,9 @@ def p_expresion_funcion_nativa(t):
                     |   FTAN PARENTESIS_IZQ expresion PARENTESIS_DER
                     |   FSQRT PARENTESIS_IZQ expresion PARENTESIS_DER
                     |   UPERCASE PARENTESIS_IZQ expresion PARENTESIS_DER
-                    |   LOWERCASE PARENTESIS_IZQ expresion PARENTESIS_DER'''
+                    |   LOWERCASE PARENTESIS_IZQ expresion PARENTESIS_DER
+                    |   FLENGTH PARENTESIS_IZQ expresion PARENTESIS_DER
+                    |   FPOP LNOT PARENTESIS_IZQ expresion PARENTESIS_DER'''
     if t.slice[1].type=="FLOG10":
         t[0]=ExpresionNativa(OpeNativas.LOGCOMUN,t[3],t.lineno(1),t.lexpos(1))
     elif t.slice[1].type=="FLOG":
@@ -153,6 +155,10 @@ def p_expresion_funcion_nativa(t):
         t[0]=ExpresionNativa(OpeNativas.RAIZ,t[3],t.lineno(1),t.lexpos(1))
     elif t.slice[1].type=="UPERCASE":
         t[0]=ExpresionNativa(OpeNativas.UPER,t[3],t.lineno(1),t.lexpos(1))
+    elif t.slice[1].type=="FLENGTH":
+        t[0]=ExpresionNativa(OpeNativas.LENGT,t[3],t.lineno(1),t.lexpos(1))
+    elif t.slice[1].type=="FPOP":
+        t[0]=ExpresionNativa(OpeNativas.POP,t[4],t.lineno(1),t.lexpos(1))
     else:
         t[0]=ExpresionNativa(OpeNativas.LOWER,t[3],t.lineno(1),t.lexpos(1))
 
@@ -295,12 +301,15 @@ def p_params_funcion(t):
 
 def p_llamada_funcion(t):
     '''llamada_funcion  :   ID PARENTESIS_IZQ PARENTESIS_DER
-                        |   ID PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
+                        |   ID PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
+                        |   FPUSH LNOT PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
     if str(t[1]) in listaStructs:
         t[0]=DeclararStruct(t[1],t[3],t.lineno(1), t.lexpos(1))
         esStruct=True
     elif len(t)==4:
         t[0] = LLamadaFuncion(t[1],[],t.lineno(1), t.lexpos(1))
+    if len(t)==6:
+        t[0]=Fpush(t[4],t.lineno(1), t.lexpos(1))
     else:
         t[0] = LLamadaFuncion(t[1],t[3],t.lineno(1), t.lexpos(1)) 
 def p_funcion_return(t):

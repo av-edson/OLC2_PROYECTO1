@@ -28,7 +28,7 @@ class AccesoArreglo(Expresion):
             if len(listaAcceso)==1:
                 index = listaAcceso.pop()
                 esRango = False
-                if isinstance(index,ExpresionLiteral):
+                if isinstance(index,Expresion):
                     index = index.ejecutar(enviroment)
                 else:
                     esRango = True

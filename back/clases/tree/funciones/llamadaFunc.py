@@ -35,7 +35,13 @@ class LLamadaFuncion(Expresion):
                             else:
                                 # agregando variable local struct
                                 e = e.value
-                                entornoInterno.addVariableStruct(p.identificador,e.tipoStruct,e.tipoStruct.mutable,e.atributos)
+                                if p.tipoDato==Type.STRUCT:
+                                    entornoInterno.addVariableStruct(p.identificador,e.tipoStruct,e.tipoStruct.mutable,e.atributos)
+                                elif p.tipoDato==Type.ARRAY:
+                                    entornoInterno.add_variable(p.identificador,e,Type.ARRAY,3,p.line,p.column)
+                                else:
+                                    print("no es posible llamar la funcion por los parametros que ingreso")
+                                    return
 
                     # ejecutando las instrucciones de la funcion
                     bloque:BloqueInstrucciones = func.instrucciones

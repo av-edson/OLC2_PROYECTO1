@@ -1,3 +1,5 @@
+from clases.expresiones.expresionLiteral import ExpresionLiteral
+from clases.abstract.instruccion import Instruccion
 import time
 from clases.error import Error
 from clases.enviroment.enviroment import Enviroment
@@ -67,4 +69,34 @@ class FSimple(Expresion):
             num = float(valor.value)
             return Return(num,Type.FLOAT)
 
-        
+class Fpush(Instruccion):
+    def __init__(self,listaExpresiones, line, column):
+        Instruccion.__init__(self,line, column) 
+        self.identificador = ""
+        self.expresiones = listaExpresiones
+
+    def ejecutar(self, enviroment):
+        try:
+            gl = enviroment.getGlobal()
+            ide = self.expresiones[0].ejecutar(enviroment)
+            expresion = self.expresiones[1].ejecutar(enviroment)
+            if len(self.expresiones)>2:
+                print("Mas de 2 parametros para la funcion push")     
+                gl.listaErrores.append(Error("Mas de 2 parametros para la funcion push",self.line,self.column,time.strftime("%c"))) 
+                return
+
+            if ide.tipo!=Type.ARRAY:
+                print("Funcion solo admitida para arreglos")     
+                gl.listaErrores.append(Error("Funcion solo admitida para arreglos",self.line,self.column,time.strftime("%c"))) 
+                return
+
+            if expresion.tipo==Type.BREACKST or expresion.tipo==Type.CONTINUEST or expresion.tipo==Type.RETURNST or expresion.tipo==Type.UNDEFINED:
+                print("Expresion para pushear no admitida o tiene error")
+                gl.listaErrores.append(Error("Expresion para pushear no admitida o tiene error",self.line,self.column,time.strftime("%c"))) 
+                return
+            nuevo = ExpresionLiteral(expresion.tipo,expresion.value,self.line,self.column)
+            ide.value.append(nuevo)
+        except:
+            print("error inesperado en funcion push")
+
+           

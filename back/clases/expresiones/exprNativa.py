@@ -15,6 +15,8 @@ class OpeNativas(Enum):
     RAIZ=5
     UPER=6
     LOWER=7
+    LENGT=8
+    POP=9
 
 class ExpresionNativa(Expresion):
     def __init__(self,tipo,content, line, column,base=None):
@@ -43,6 +45,10 @@ class ExpresionNativa(Expresion):
                 return self.raiz(expre)
             elif self.tipo==OpeNativas.UPER:
                 return self.uper(expre,enviroment)
+            elif self.tipo==OpeNativas.LENGT:
+                return self.length(expre,enviroment)
+            elif self.tipo==OpeNativas.POP:
+                return self.pop(expre,enviroment)
             else:
                 return self.lower(expre,enviroment)
         except:
@@ -134,3 +140,21 @@ class ExpresionNativa(Expresion):
             return Return()
         nuevoValor = str(expre.value).lower()
         return Return(nuevoValor,Type.STRING)
+    def length(self,lista,env):
+        if lista.tipo!=Type.ARRAY:
+            print("Funcion Length solo valida para arreglos")
+            gl = env.getGlobal()
+            gl.listaErrores.append(Error("Funcion Length solo valida para arreglos",self.line,self.column,time.strftime("%c")))
+            return Return()
+        size = len(lista.value)
+        return Return(size,Type.INT)
+    def pop(self,lista,env):
+        if lista.tipo!=Type.ARRAY:
+            print("Funcion Length solo valida para arreglos")
+            gl = env.getGlobal()
+            gl.listaErrores.append(Error("Funcion Length solo valida para arreglos",self.line,self.column,time.strftime("%c")))
+            return Return() 
+        val = lista.value.pop()
+        return val.ejecutar(env)
+
+

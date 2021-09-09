@@ -1,4 +1,11 @@
+function swap(i::Int64,j::Int64,arr) 
+    temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+end;
 
-a = [1,[2,3]];
-a[2][1]="culero";
-println(a);
+arreglo = [32, 21, 7, 89, 56, 909, 109, 2, 9, 1, 44, 3, 8200, 11, 8, 10];
+copiaArreglo = [32, 21, 7, 89, 56, 909, 109, 2, 9, 1, 44, 3, 8200, 11, 8, 10];
+
+push!(arreglo,"culos");
+println(arreglo);
