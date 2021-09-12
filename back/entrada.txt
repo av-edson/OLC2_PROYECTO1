@@ -1,11 +1,18 @@
-function swap(i::Int64,j::Int64,arr) 
-    temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+function funcion()
+   arr = [1,2,3,4,5];
+    for numero in arr[2:4]
+    print(numero, " "); # Imprime 2 3 4
+    end;
 end;
+    
+funcion();
 
-arreglo = [32, 21, 7, 89, 56, 909, 109, 2, 9, 1, 44, 3, 8200, 11, 8, 10];
-copiaArreglo = [32, 21, 7, 89, 56, 909, 109, 2, 9, 1, 44, 3, 8200, 11, 8, 10];
-
-push!(arreglo,"culos");
-println(arreglo);
+for animal in ["perro", "gato", "tortuga"]
+print(animal);
+println("es mi favorito");
+     #= Imprime
+     perro es mi favorito
+     gato es mi favorito
+     tortuga es mi favorito
+     =#
+end;

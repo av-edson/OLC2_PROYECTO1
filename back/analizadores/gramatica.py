@@ -308,7 +308,7 @@ def p_llamada_funcion(t):
         esStruct=True
     elif len(t)==4:
         t[0] = LLamadaFuncion(t[1],[],t.lineno(1), t.lexpos(1))
-    if len(t)==6:
+    elif len(t)==6:
         t[0]=Fpush(t[4],t.lineno(1), t.lexpos(1))
     else:
         t[0] = LLamadaFuncion(t[1],t[3],t.lineno(1), t.lexpos(1)) 

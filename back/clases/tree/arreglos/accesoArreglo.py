@@ -107,7 +107,7 @@ class AccesoArreglo(Expresion):
 
     def getRango(self,inicio,fin,lista,env):
         regreso = []
-        for i in range(fin):
+        for i in range(fin-1):
             i=i+inicio-1
             ret = lista[i]
             regreso.append(ret)

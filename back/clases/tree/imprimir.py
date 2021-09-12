@@ -1,3 +1,4 @@
+from clases.expresiones.expresionLiteral import ExpresionLiteral
 import time
 import copy
 from clases.error import Error
@@ -33,7 +34,10 @@ class Imprimir(Instruccion):
                     res.value = aux
                 if res.tipo==Type.ARRAY:
                     res = copy.copy(res.value)
-                    aux = str(expre.identificador)
+                    if isinstance(expre,ExpresionLiteral):
+                        aux=""
+                    else:
+                        aux = str(expre.identificador)
                     aux+=self._getArray(res,enviroment)[:-1]
                     lista.append(Return(aux,Type.STRING))
                     continue

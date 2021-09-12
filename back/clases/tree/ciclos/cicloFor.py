@@ -70,6 +70,21 @@ class CicloFor(Instruccion):
                     ciclo = self.valuarRango(inicio,fin)
                     if ciclo:
                         entornoInterno.modificar_variable(self.variable,listaCaracteres[inicio-1],None)
+            elif var.tipo==Type.ARRAY:
+                var = var.value
+                entornoInterno:Enviroment = Enviroment(enviroment,"ciclo for")
+                for expreLiteral in var:
+                    iterador = expreLiteral.ejecutar(enviroment)
+                    if iterador.tipo==Type.UNDEFINED:
+                        print("error en iterador")
+                        return
+                    entornoInterno.add_variable(self.variable,iterador.value,iterador.tipo,2,self.line,self.column)
+                    ret =self.bloque.ejecutar(entornoInterno)
+                    if ret != None:
+                        if ret.tipo == Type.BREACKST:
+                            break
+                        elif ret.tipo != Type.CONTINUEST:
+                            return ret
             else:
                 print('expresion invalida para el ciclo for')
                 gl.listaErrores.append(Error("expresion invalida para el ciclo for",self.line,self.column,time.strftime("%c")))
