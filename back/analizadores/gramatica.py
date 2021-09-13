@@ -305,7 +305,6 @@ def p_llamada_funcion(t):
                         |   FPUSH LNOT PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
     if str(t[1]) in listaStructs:
         t[0]=DeclararStruct(t[1],t[3],t.lineno(1), t.lexpos(1))
-        esStruct=True
     elif len(t)==4:
         t[0] = LLamadaFuncion(t[1],[],t.lineno(1), t.lexpos(1))
     elif len(t)==6:

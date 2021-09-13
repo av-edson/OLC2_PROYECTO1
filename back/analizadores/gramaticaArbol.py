@@ -41,7 +41,9 @@ def p_instruccion(t):
                     |   sentencia_control
                     |   salto_control PUNTOCOMA
                     |   crear_struct PUNTOCOMA
-                    |   modificar_struct PUNTOCOMA'''
+                    |   modificar_struct PUNTOCOMA
+                    |   declarar_arr    PUNTOCOMA
+                    |   modificar_arreglo PUNTOCOMA'''
     temp = Nodo("Instruccion")
     pt = Nodo(";")
     temp.ingresarHijo(t[1])
@@ -88,7 +90,8 @@ def p_tipodato(t):
                     |   DFLOAT64 
                     |   DBOOL 
                     |   DSTRING 
-                    |   DCHAR ''' 
+                    |   DCHAR 
+                    |   STRUCT''' 
     temp =  Nodo(t[1])
     t[0]=temp  
 
@@ -127,15 +130,22 @@ def p_expresion_funcion_nativa(t):
                     |   FTAN PARENTESIS_IZQ expresion PARENTESIS_DER
                     |   FSQRT PARENTESIS_IZQ expresion PARENTESIS_DER
                     |   UPERCASE PARENTESIS_IZQ expresion PARENTESIS_DER
-                    |   LOWERCASE PARENTESIS_IZQ expresion PARENTESIS_DER'''
+                    |   LOWERCASE PARENTESIS_IZQ expresion PARENTESIS_DER
+                    |   FLENGTH PARENTESIS_IZQ expresion PARENTESIS_DER
+                    |   FPOP LNOT PARENTESIS_IZQ expresion PARENTESIS_DER'''
     temp = Nodo("Funcion Nativa")
     temp.ingresarHijo(Nodo(t[1]))
     temp.ingresarHijo(Nodo(t[2]))
-    temp.ingresarHijo(t[3])
-    temp.ingresarHijo(Nodo(t[4]))
-    if len(t)==7:
+    if len(t)==6:
+        temp.ingresarHijo(Nodo(t[3]))
+        temp.ingresarHijo(t[4])
+        temp.ingresarHijo(Nodo(t[5]))
+    elif len(t)==7:
         temp.ingresarHijo(t[5])
         temp.ingresarHijo(Nodo(t[6]))
+    else:
+        temp.ingresarHijo(t[3])
+        temp.ingresarHijo(Nodo(t[4]))
     t[0]=temp
 
 def p_expresion_binaria(t):
@@ -174,7 +184,8 @@ def p_final_expresion(t):
                         |   BOOLEANO
                         |   NULO
                         |   ID
-                        |   accesoStruct'''
+                        |   accesoStruct
+                        |   lista_array'''
     if len(t) == 4:
         temp = Nodo("agrupacion")
         temp.ingresarHijo(Nodo("("))
@@ -184,6 +195,8 @@ def p_final_expresion(t):
     elif t.slice[1].type == "llamada_funcion":
         t[0]=t[1]
     elif t.slice[1].type == "accesoStruct":
+        t[0]=t[1]
+    elif t.slice[1].type=="lista_array":
         t[0]=t[1]
     else:
         temp= Nodo(str(t[1]))
@@ -275,11 +288,19 @@ def p_params_funcion(t):
 
 def p_llamada_funcion(t):
     '''llamada_funcion  :   ID PARENTESIS_IZQ PARENTESIS_DER
-                        |   ID PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
+                        |   ID PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
+                        |   FPUSH LNOT PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
     temp = Nodo("LLamada Funcion")
     temp.ingresarHijo(Nodo(t[1]))
     temp.ingresarHijo(Nodo(t[2]))
-    if len(t)==4:
+    if str(t[1]) in listaStructs:
+        temp.valor="Struct"
+    if len(t)==6:
+        temp.valor="Funcion Push"
+        temp.ingresarHijo(Nodo(t[3]))
+        temp.ingresarHijo(t[4])
+        temp.ingresarHijo(Nodo(t[5]))
+    elif len(t)==4:
         temp.ingresarHijo(Nodo(t[3]))
     else:
         temp.ingresarHijo(t[3])
@@ -390,10 +411,12 @@ def p_crear_struct(t):
     if len(t)==5:
         temp.ingresarHijo(t[3])
         temp.ingresarHijo(Nodo(t[4]))
+        listaStructs.append(str(t[2]))
     else:
         temp.ingresarHijo(Nodo(t[3]))
         temp.ingresarHijo(t[4])
         temp.ingresarHijo(Nodo(t[5]))
+        listaStructs.append(str(t[3]))
 
 
 def p_contenido_struct(t):
@@ -437,6 +460,68 @@ def p_modificar_struct(t):
     temp.ingresarHijo(Nodo(t[3]))
     temp.ingresarHijo(Nodo(t[4]))
     temp.ingresarHijo(t[5])
+    t[0]=temp
+
+def p_declarar_arr(t):
+    '''declarar_arr :   ID IGUAL lista_array'''
+    temp=Nodo("Declaracion Arreglo")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(Nodo(t[2]))
+    temp.ingresarHijo(t[3])
+    t[0]=temp
+
+def p_lista_array(t):
+    '''lista_array  : COR_ABRE lista_expresiones COR_CIERRA'''
+    temp=Nodo("Lista Arreglo")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(t[2])
+    temp.ingresarHijo(Nodo(t[3]))
+    t[0]=temp
+
+def p_accesoArreglo(t):
+    '''accesoArreglo    :   ID listaAcceso_arreglo'''
+    temp=Nodo("Acceso Arreglo")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(t[2])
+    t[0]=temp
+
+def p_listaAcceso_arreglo(t):
+    '''listaAcceso_arreglo  :   listaAcceso_arreglo COR_ABRE expresion COR_CIERRA
+                            |   COR_ABRE expresion COR_CIERRA
+                            |   COR_ABRE expresion DOSPUNTOS expresion COR_CIERRA
+                            |   listaAcceso_arreglo COR_ABRE expresion DOSPUNTOS expresion COR_CIERRA'''
+    temp=Nodo("Lista Acceso Arreglo")
+    if len(t)==4:
+        temp.ingresarHijo(Nodo(t[1]))
+        temp.ingresarHijo(t[2])
+        temp.ingresarHijo(Nodo(t[3]))
+    elif len(t)==6:
+        temp.ingresarHijo(Nodo(t[1]))
+        temp.append(t[2])
+        temp.ingresarHijo(Nodo(t[3]))
+        temp.append(t[4])
+        temp.ingresarHijo(Nodo(t[5]))
+    elif len(t)==7:
+        temp.ingresarHijo(t[1])
+        temp.ingresarHijo(Nodo(t[2]))
+        temp.append(t[3])
+        temp.ingresarHijo(Nodo(t[4]))
+        temp.append(t[5])
+        temp.ingresarHijo(Nodo(t[6]))
+    else:
+        temp.ingresarHijo(t[1])
+        temp.ingresarHijo(Nodo(t[2]))
+        temp.ingresarHijo(t[3])
+        temp.ingresarHijo(Nodo(t[4]))
+    t[0]=temp
+
+def p_modificar_arreglo(t):
+    '''modificar_arreglo    :   ID listaAcceso_arreglo IGUAL expresion'''
+    temp=Nodo("Modificar Arreglo")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(t[2])
+    temp.ingresarHijo(Nodo(t[3]))
+    temp.ingresarHijo(t[4])
     t[0]=temp
 
 import ply.yacc as yacc
