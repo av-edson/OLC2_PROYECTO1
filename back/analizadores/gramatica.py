@@ -407,8 +407,19 @@ def p_atributo_struct(t):
         t[0]=Simbolo(None,t[1],t[4])
 
 def p_acceso_struct(t):
-    '''accesoStruct :   ID PUNTO ID'''
-    t[0] = AccesoStruct(str(t[1]),str(t[3]),t.lineno(1),t.lexpos(1))
+    '''accesoStruct :   ID PUNTO ID
+                    |   ID PUNTO ID otroAcceso'''
+    if len(t)==4:
+        t[0] = AccesoStruct(str(t[1]),str(t[3]),t.lineno(1),t.lexpos(1))
+    else:
+        temp = []
+        temp.append(str(t[3]))
+        temp.append(t[4])
+        t[0] = AccesoStruct(str(t[1]),temp,t.lineno(1),t.lexpos(1))
+
+def p_otroAcceso(t):
+    '''otroAcceso   :   PUNTO ID'''
+    t[0]=str(t[2])
 
 def p_modificar_struct(t):
     '''modificar_struct :   ID PUNTO ID IGUAL expresion'''

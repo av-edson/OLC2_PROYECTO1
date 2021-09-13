@@ -28,16 +28,17 @@ class LLamadaFuncion(Expresion):
                             p:Parametro = func.params[i]
                             e:Return = listaRegreso[i] 
                             # referencia de listas y structs
-                            if p.tipoDato == None:
-                                p.tipoDato = e.tipo
+                            #if p.tipoDato == None:
+                            #    p.tipoDato = e.tipo
                             if not (e.tipo==Type.ARRAY or e.tipo==Type.STRUCT   ):
-                                entornoInterno.add_variable(p.identificador,e.value,p.tipoDato,2,self.line,self.column)
+                                entornoInterno.add_variable(p.identificador,e.value,e.tipo,2,self.line,self.column)
                             else:
                                 # agregando variable local struct
+                                tipo = e.tipo
                                 e = e.value
-                                if p.tipoDato==Type.STRUCT:
+                                if tipo==Type.STRUCT:
                                     entornoInterno.addVariableStruct(p.identificador,e.tipoStruct,e.tipoStruct.mutable,e.atributos)
-                                elif p.tipoDato==Type.ARRAY:
+                                elif tipo==Type.ARRAY:
                                     entornoInterno.add_variable(p.identificador,e,Type.ARRAY,3,p.line,p.column)
                                 else:
                                     print("no es posible llamar la funcion por los parametros que ingreso")

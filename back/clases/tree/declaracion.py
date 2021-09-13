@@ -53,6 +53,8 @@ class Asignacion(Instruccion):
             if tipoAux == Type.STRUCT:
                 reg = reg.value
                 atributos = reg.valor
+                if atributos == None:
+                    atributos = reg.atributos
                 struct = reg.tipoStruct
                 env.addVariableStruct(self.ide,struct,struct.mutable,atributos)
                 return
