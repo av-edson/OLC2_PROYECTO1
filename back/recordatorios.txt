@@ -1,16 +1,19 @@
         NO PUEDE TERMINAR EL ARCHIVO EN COMENTARIO
 
-falta:
-    funcion lengt
-    valor por referencia en funciones
-
 
 WARNING: Token 'COMENTARIOMULTIPLE' defined, but not used
 WARNING: Token 'COMENTARIOSIMPLE' defined, but not used
-WARNING: Token 'CORCHETE_DER' defined, but not used
-WARNING: Token 'CORCHETE_IZQ' defined, but not used
-WARNING: Token 'FLENGTH' defined, but not used
-WARNING: Token 'FPOP' defined, but not used
-WARNING: Token 'FPUSH' defined, but not used
-WARNING: Token 'LLAVE_ABRE' defined, but not used
-WARNING: Token 'LLAVE_CIERRA' defined, but not used
+
+----------------- basico e intermedio------------------------------------
+archivo basico.jl:
+    funcion struct() necesita llevar "Int64"  linea 36
+------------------------- funciones ----------------------------------
+recursivas.jl:
+    falta ";" linea 5
+----------------------------Structs ---------------------------------
+-------------------------- Arreglos --------------------------------
+archivo unadim.jl:
+    declaracion tiene que ser "ID = Expresión :: TIPO;" linea 2
+    falta ";" en linea 33 y 38
+archivo dosdim.jl
+    falta ";" en linea 57

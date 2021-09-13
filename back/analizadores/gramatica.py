@@ -58,7 +58,6 @@ def p_instruccion(t):
                     |   salto_control PUNTOCOMA
                     |   crear_struct PUNTOCOMA
                     |   modificar_struct PUNTOCOMA
-                    |   declarar_arr    PUNTOCOMA
                     |   modificar_arreglo PUNTOCOMA'''
     t[0]=t[1]
 def p_instruccion_error(t):
@@ -334,7 +333,10 @@ def p_sentencia_if(t):
     if len(t)==5:
         t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1))
     elif len(t)==6:
-        t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),None,t[4])
+        if t.slice[4].type=="elif_lista":
+            t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),t[4],None)
+        else:
+            t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),None,t[4])
     elif len(t)==7:
         t[0]=SentenciaIF(t[2],t[3],t.lineno(1), t.lexpos(1),t[4],t[5])
 
@@ -412,9 +414,10 @@ def p_modificar_struct(t):
     '''modificar_struct :   ID PUNTO ID IGUAL expresion'''
     t[0]=ModificarStruct(t[1],t[3],t[5],t.lineno(1),t.lexpos(1))
 
-def p_declarar_arr(t):
-    '''declarar_arr :   ID IGUAL lista_array'''
-    t[0]=DeclaracionArreglo(t[1],t[3],t.lineno(1),t.lexpos(1))
+#def p_declarar_arr(t):
+#    '''declarar_arr :   ID IGUAL COR_ABRE lista_expresiones COR_CIERRA'''
+#    temp = ExpresionLiteral(Type.ARRAY,t[4],t.lineno(1),t.lexpos(0))
+#    t[0]=DeclaracionArreglo(t[1],temp,t.lineno(1),t.lexpos(1))
 
 def p_lista_array(t):
     '''lista_array  : COR_ABRE lista_expresiones COR_CIERRA'''
@@ -449,6 +452,7 @@ def p_listaAcceso_arreglo(t):
 def p_modificar_arreglo(t):
     '''modificar_arreglo    :   ID listaAcceso_arreglo IGUAL expresion'''
     t[0]=ModificarArreglo(t[1],t[2],t[4],t.lineno(1),t.lexpos(1))
+
 
 import ply.yacc as yacc
 parser = yacc.yacc()

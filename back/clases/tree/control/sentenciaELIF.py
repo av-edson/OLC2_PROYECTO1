@@ -26,3 +26,4 @@ class SentenciaELIF(Instruccion):
             tieneReturn=self.bloque.ejecutar(entornoInterno)
             if tieneReturn != None:
                 return tieneReturn
+            return True

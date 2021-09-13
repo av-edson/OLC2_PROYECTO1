@@ -1,4 +1,5 @@
-from clases.abstract.type import Type
+from clases.expresiones.expresionLiteral import ExpresionLiteral
+from clases.abstract.type import Return, Type
 from clases.error import Error
 import time
 from clases.abstract.instruccion import Instruccion
@@ -18,7 +19,7 @@ class DeclaracionArreglo(Instruccion):
             return
         self.lista.clear()
         try:
-            for expr in self.listaExpresiones.valor:
+            for expr in self.listaExpresiones.value:
                 ret = expr.ejecutar(enviroment)
                 if ret == None:
                     print("expresion no admitida dentro del arreglo, None")
@@ -32,12 +33,13 @@ class DeclaracionArreglo(Instruccion):
                     print("expresion no admitida dentro del arreglo")
                     gl.listaErrores.append(Error("expresion no admitida dentro del arreglo",self.line,self.column,time.strftime("%c")))
                     return
-                self.lista.append(ret)
-            if len(self.lista) != len(self.listaExpresiones.valor):
+                aux = ExpresionLiteral(ret.tipo,ret.value,self.line,self.column)
+                self.lista.append(aux)
+            if len(self.lista) != len(self.listaExpresiones.value):
                 print("Error 2 expresion no admitida dentro del arreglo")
                 gl.listaErrores.append(Error("Error 2 expresion no admitida dentro del arreglo",self.line,self.column,time.strftime("%c")))
                 return
-            enviroment.add_variable(self.identificador,self,Type.ARRAY,3,self.line,self.column)
+            enviroment.add_variable(self.identificador,self.lista,Type.ARRAY,3,self.line,self.column)
         except:
             print("Error al declarar el arreglo")
             gl.listaErrores.append(Error("Una de las expresiones el print tiene error",self.line,self.column,time.strftime("%c")))
@@ -52,3 +54,6 @@ class DeclaracionArreglo(Instruccion):
                 contenido+=str(aux.value)
         contenido+="]"
         return contenido
+
+
+

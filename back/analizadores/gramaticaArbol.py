@@ -185,6 +185,7 @@ def p_final_expresion(t):
                         |   NULO
                         |   ID
                         |   accesoStruct
+                        |   accesoArreglo
                         |   lista_array'''
     if len(t) == 4:
         temp = Nodo("agrupacion")
@@ -197,6 +198,8 @@ def p_final_expresion(t):
     elif t.slice[1].type == "accesoStruct":
         t[0]=t[1]
     elif t.slice[1].type=="lista_array":
+        t[0]=t[1]
+    elif t.slice[1].type=="accesoArreglo":
         t[0]=t[1]
     else:
         temp= Nodo(str(t[1]))
@@ -497,16 +500,16 @@ def p_listaAcceso_arreglo(t):
         temp.ingresarHijo(Nodo(t[3]))
     elif len(t)==6:
         temp.ingresarHijo(Nodo(t[1]))
-        temp.append(t[2])
+        temp.ingresarHijo(t[2])
         temp.ingresarHijo(Nodo(t[3]))
-        temp.append(t[4])
+        temp.ingresarHijo(t[4])
         temp.ingresarHijo(Nodo(t[5]))
     elif len(t)==7:
         temp.ingresarHijo(t[1])
         temp.ingresarHijo(Nodo(t[2]))
-        temp.append(t[3])
+        temp.ingresarHijo(t[3])
         temp.ingresarHijo(Nodo(t[4]))
-        temp.append(t[5])
+        temp.ingresarHijo(t[5])
         temp.ingresarHijo(Nodo(t[6]))
     else:
         temp.ingresarHijo(t[1])

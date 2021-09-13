@@ -1,18 +1,6 @@
-function funcion()
-   arr = [1,2,3,4,5];
-    for numero in arr[2:4]
-    print(numero, " "); # Imprime 2 3 4
-    end;
+function probar(d)
+    println(d);
 end;
-    
-funcion();
 
-for animal in ["perro", "gato", "tortuga"]
-print(animal);
-println("es mi favorito");
-     #= Imprime
-     perro es mi favorito
-     gato es mi favorito
-     tortuga es mi favorito
-     =#
-end;
+probar(3);
+probar("asdf");

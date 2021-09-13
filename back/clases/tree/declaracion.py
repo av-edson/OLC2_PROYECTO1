@@ -35,7 +35,9 @@ class Asignacion(Instruccion):
                 gl.listaErrores.append(Error("Error en la declaracion de la variable"+str(self.ide),self.line,self.column,time.strftime("%c")))
                 return
             if t==Type.ARRAY:
-                env.add_variable(self.ide,reg.value,Type.ARRAY,3,self.line,self.column)
+                declaArray = DeclaracionArreglo(self.ide,reg,self.line,self.column)
+                declaArray.ejecutar(env)
+                #env.add_variable(self.ide,reg.value,Type.ARRAY,3,self.line,self.column)
                 return
             # asignar tipo de variable si no tiene
             tipoAux = None

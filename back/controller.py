@@ -3,13 +3,15 @@ from clases.error import Error
 from analizadores.gramatica import parser
 #from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
-from analizadores.lexer import errores
+from analizadores.lexer import errores,listaStructs
 
 class Regreso:
-    def __init__(self,consola,arbol,er):
+    def __init__(self,comp,consola,arbol,er,table):
+        self.compilacion=comp
         self.consola = consola
         self.ast = arbol
         self.errores =er
+        self.tabla=table
 
 def objToJson(obj):
     lista = []
@@ -22,24 +24,42 @@ def objToJson(obj):
         lista.append(dic)
     return lista
 
+def tablaToJson(obj):
+    lista = []
+    for var in obj:
+        var = obj[var]
+        dic = {}
+        dic["ambito"]=var.ambito
+        dic["tipo"]=var.tipo
+        dic["valor"]=var.valor
+        dic["nombre"]=var.nombre
+        dic["fila"]=var.fila
+        dic["columna"]=var.columna
+        lista.append(dic)
+    return lista
+
 def analizarEntrada(contenido=None):
     try:
         #arbol:Nodo= parser2.parse(contenido)
-        global errores
+        global errores,listaStructs
         errores.clear()
+        listaStructs.clear()
+        listaStructs.clear()
         ast = parser.parse(contenido)
         gl = Enviroment(None,"Global")
         try:
             for instruccion in ast:
                 if instruccion != None:
                     d=instruccion.ejecutar(gl)
-        except:
+            gl.addVariable_TablaSimbolos()
+        except Exception as e:
             print("Error al ejecutar instrucciones")
-            return Regreso("Error inesperado ocurrio","","")
+            return Regreso(False,str(e),"","","")
         listJson = objToJson(errores)
-        #return Regreso(gl.consola,arbol.getGrafico(),listJson)
-    except:
-        return Regreso("Error inesperado ocurrio","","")
+        tablaSimbolos = tablaToJson(gl.listaSimbolos)
+        #return Regreso(True,gl.consola,arbol.getGrafico(),listJson,tablaSimbolos)
+    except Exception as e:
+        return Regreso(False,str(e),"","","")
 f = open('entrada.txt',encoding="UTF-8")
 contenido = f.read()
 ast = parser.parse(contenido)
@@ -54,11 +74,12 @@ try:
     gl.addVariable_TablaSimbolos()
 except:
     print("Error al ejecutar instrucciones")
+#s=analizarEntrada(contenido)
 f.close()
 print(gl.consola)
-for var in gl.listaSimbolos:
-    var = gl.listaSimbolos[var]
-    print(var.ambito+" - "+var.nombre+" - "+var.tipo+" - "+var.valor)
+#for var in gl.listaSimbolos:
+#    var = gl.listaSimbolos[var]
+#    print(var.ambito+" - "+var.nombre+" - "+var.tipo+" - "+var.valor)
 #print(arbol.getGrafico())
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
@@ -66,9 +87,4 @@ for var in gl.listaSimbolos:
         #s=instruccion.ejecutar(gl)
         #print(str(s.tipo)+" --- "+str(s.value))
 
-#s=analizarEntrada("~s=8;\nprint(\"hola joto\");")
 #print(s.errores)
-
-#print("---------------")
-#for er in errores:
-#    print(er.desc+" -> "+er.lin)
