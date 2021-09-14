@@ -16,4 +16,7 @@ archivo unadim.jl:
     declaracion tiene que ser "ID = Expresión :: TIPO;" linea 2
     falta ";" en linea 33 y 38
 archivo dosdim.jl
-    falta ";" en linea 57
+    falta ";" en linea 57 y 71
+archivo tresdim.jl:
+    falta ";" en linea 40
+--------------------------------------------------------------------

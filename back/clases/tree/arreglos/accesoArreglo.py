@@ -1,4 +1,3 @@
-from clases.expresiones.expresionLiteral import ExpresionLiteral
 from clases.enviroment.enviroment import Enviroment
 import time
 from clases.error import Error
@@ -68,7 +67,7 @@ class AccesoArreglo(Expresion):
         index = listaAcceso.pop()
 
         esRango = False
-        if isinstance(index,ExpresionLiteral):
+        if isinstance(index,Expresion):
             index = index.ejecutar(env)
         else:
             esRango = True

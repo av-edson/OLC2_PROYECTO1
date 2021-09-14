@@ -1,3 +1,4 @@
+from clases.expresiones.exprNativa import ExpresionNativa
 from clases.expresiones.expresionLiteral import ExpresionLiteral
 import time
 import copy
@@ -34,10 +35,7 @@ class Imprimir(Instruccion):
                     res.value = aux
                 if res.tipo==Type.ARRAY:
                     res = copy.copy(res.value)
-                    if isinstance(expre,ExpresionLiteral):
-                        aux=""
-                    else:
-                        aux = str(expre.identificador)
+                    aux=""
                     aux+=self._getArray(res,enviroment)[:-1]
                     lista.append(Return(aux,Type.STRING))
                     continue

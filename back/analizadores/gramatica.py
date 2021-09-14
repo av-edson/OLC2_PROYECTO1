@@ -260,11 +260,19 @@ def p_llamada_nativas(t):
 
 def p_imprimir(t):
     '''imprimir :   IMPRIMIR PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
-                |   IMPRIMIR_ML PARENTESIS_IZQ lista_expresiones PARENTESIS_DER''' 
+                |   IMPRIMIR_ML PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
+                |   IMPRIMIR_ML PARENTESIS_IZQ  PARENTESIS_DER
+                |   IMPRIMIR PARENTESIS_IZQ  PARENTESIS_DER''' 
     if t.slice[1].type=="IMPRIMIR":
-        t[0]=Imprimir(t[3],TipoImpresion.PRINT,t.lineno(1),t.lexpos(1))
+        if len(t)==5:
+            t[0]=Imprimir(t[3],TipoImpresion.PRINT,t.lineno(1),t.lexpos(1))
+        else:
+            t[0]=Imprimir([],TipoImpresion.PRINT,t.lineno(1),t.lexpos(1))
     else:
-        t[0]=Imprimir(t[3],TipoImpresion.PRINTLN,t.lineno(1),t.lexpos(1))
+        if len(t)==5:
+            t[0]=Imprimir(t[3],TipoImpresion.PRINTLN,t.lineno(1),t.lexpos(1))
+        else:
+            t[0]=Imprimir([],TipoImpresion.PRINTLN,t.lineno(1),t.lexpos(1))
 
 def p_lista_expresiones(t):
     '''lista_expresiones    :   lista_expresiones COMA expresion'''  
@@ -415,7 +423,7 @@ def p_acceso_struct(t):
         temp = []
         temp.append(str(t[3]))
         temp.append(t[4])
-        t[0] = AccesoStruct(str(t[1]),temp,t.lineno(1),t.lexpos(1))
+        t[0] = AccesoStruct(str(t[1]),temp,t.lineno(1),t.lexpos(1),True)
 
 def p_otroAcceso(t):
     '''otroAcceso   :   PUNTO ID'''

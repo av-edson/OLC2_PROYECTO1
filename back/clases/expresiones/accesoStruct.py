@@ -7,15 +7,20 @@ from clases.abstract.type import *
 import copy
 
 class AccesoStruct(Expresion):
-    def __init__(self,idVar,atributo, line, column):
+    def __init__(self,idVar,atributo, line, column,esLista=None):
         Expresion.__init__(self,line, column)
         self.identificador = idVar
         self.atributo = atributo
+        self.esLista=esLista
     
     def ejecutar(self, enviroment):
         try:
             simbolo = enviroment.findVariable(self.identificador)
-            copia = list(reversed(self.atributo))
+            if self.esLista !=None:
+                copia = list(reversed(self.atributo))
+            else:
+                copia = []
+                copia.append(self.atributo)
             return self.getContenido(enviroment,simbolo,copia)
         except:
             print("error inesperado en acceso a struct")
