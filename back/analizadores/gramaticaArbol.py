@@ -42,7 +42,6 @@ def p_instruccion(t):
                     |   salto_control PUNTOCOMA
                     |   crear_struct PUNTOCOMA
                     |   modificar_struct PUNTOCOMA
-                    |   declarar_arr    PUNTOCOMA
                     |   modificar_arreglo PUNTOCOMA'''
     temp = Nodo("Instruccion")
     pt = Nodo(";")
@@ -116,7 +115,6 @@ def p_expresion_logica(t):
         temp.ingresarHijo(Nodo("!"))
         temp.ingresarHijo(t[2])
     else:
-        print("aca")
         temp.ingresarHijo(t[1])
         temp.ingresarHijo(Nodo(t[2]))
         temp.ingresarHijo(t[3])
@@ -227,12 +225,17 @@ def p_llamada_nativas(t):
 
 def p_imprimir(t):
     '''imprimir :   IMPRIMIR PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
-                |   IMPRIMIR_ML PARENTESIS_IZQ lista_expresiones PARENTESIS_DER'''
+                |   IMPRIMIR_ML PARENTESIS_IZQ lista_expresiones PARENTESIS_DER
+                |   IMPRIMIR_ML PARENTESIS_IZQ  PARENTESIS_DER
+                |   IMPRIMIR PARENTESIS_IZQ  PARENTESIS_DER'''
     temp=Nodo("Imprimir")
     temp.ingresarHijo(Nodo(t[1]))
     temp.ingresarHijo(Nodo(t[2]))
-    temp.ingresarHijo(t[3])
-    temp.ingresarHijo(Nodo(t[4]))
+    if len(t)==4:
+        temp.ingresarHijo(Nodo(t[3]))
+    else:
+        temp.ingresarHijo(t[3])
+        temp.ingresarHijo(Nodo(t[4]))
     t[0]=temp
 
 def p_lista_expresiones(t):
@@ -421,7 +424,6 @@ def p_crear_struct(t):
         temp.ingresarHijo(Nodo(t[5]))
         listaStructs.append(str(t[3]))
 
-
 def p_contenido_struct(t):
     '''contenido_struct :   contenido_struct struct_atributo
                         |   struct_atributo'''
@@ -432,7 +434,6 @@ def p_contenido_struct(t):
         temp.ingresarHijo(t[1])
         temp.ingresarHijo(t[2])
     t[0]=temp
-
 
 def p_atributo_struct(t):
     '''struct_atributo  :   ID PUNTOCOMA
@@ -448,11 +449,21 @@ def p_atributo_struct(t):
     t[0]=temp
 
 def p_acceso_struct(t):
-    '''accesoStruct :   ID PUNTO ID'''
+    '''accesoStruct :   ID PUNTO ID
+                    |   ID PUNTO ID otroAcceso'''
     temp = Nodo("Acceso a Struct")
     temp.ingresarHijo(Nodo(t[1]))
     temp.ingresarHijo(Nodo(t[2]))
     temp.ingresarHijo(Nodo(t[3]))
+    if len(t)==5:
+        temp.ingresarHijo(t[4])
+    t[0]=temp
+
+def p_otroAcceso(t):
+    '''otroAcceso   :   PUNTO ID'''
+    temp=Nodo("Otro Acceso")
+    temp.ingresarHijo(Nodo(t[1]))
+    temp.ingresarHijo(Nodo(t[2]))
     t[0]=temp
 
 def p_modificar_struct(t):
@@ -463,14 +474,6 @@ def p_modificar_struct(t):
     temp.ingresarHijo(Nodo(t[3]))
     temp.ingresarHijo(Nodo(t[4]))
     temp.ingresarHijo(t[5])
-    t[0]=temp
-
-def p_declarar_arr(t):
-    '''declarar_arr :   ID IGUAL lista_array'''
-    temp=Nodo("Declaracion Arreglo")
-    temp.ingresarHijo(Nodo(t[1]))
-    temp.ingresarHijo(Nodo(t[2]))
-    temp.ingresarHijo(t[3])
     t[0]=temp
 
 def p_lista_array(t):
