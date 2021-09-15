@@ -182,3 +182,6 @@ def buscarColumna(inp, token):
 
 import ply.lex as lex
 lexer = lex.lex()
+def nuevoLexer():
+    global lexer
+    lexer = lex.lex()

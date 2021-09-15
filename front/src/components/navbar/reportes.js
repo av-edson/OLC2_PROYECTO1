@@ -1,11 +1,49 @@
 import React from "react";
 import { TablaErrores } from "../reportes/TablaErrores";
 import { TablaSimbolos } from "../reportes/TablaSimbolos";
+//import { Ast } from "../reportes/ast";
 
 export class Resports extends React.Component{
 
+
     state={
-        noReporte:1,
+        dot:'igraph {a -> b;c;  d -> c;  a -> d;}',
+        tabla:{},
+        errores:{},
+        mensajeRetorno:'Ninguna accion realizada'
+    }
+
+    componentDidMount = () => {
+        this.getData();
+      };
+    
+    getData = () => {
+        this.setState({dot:'igraph {a -> b;c;  d -> c;  a -> d;}',
+        tabla:[],
+        errores:[],
+        mensajeRetorno:'Ninguna accion realizada'})
+        fetch('https://backapiolc2.herokuapp.com/GetLast',{
+          method:'GET',
+          headers: {"Content-Type":"application/json"}
+        }).then(async response =>{
+              //console.log('aca')
+              const json = await response.json() 
+              if (!json.value) {
+                var mensaje = json.consola
+               // console.log(mensaje)
+                this.setState({mensajeRetorno:mensaje})
+              }else{
+                  var er = json.errores
+                  var as = String(json.ast)
+                  var sim = json.tabla
+                  this.setState({mensajeRetorno:'Carga de Reportes exitosa',tabla:sim,dot:as,errores:er})
+              }
+              alert(this.state.mensajeRetorno)
+            })
+      };
+
+    state={
+        noReporte:0,
         tipoReporte:'Tabla de Errores'
     }
 
@@ -28,26 +66,18 @@ export class Resports extends React.Component{
                   onClick={()=>this.cambio(3)}></input>
                   <label className="btn btn-outline-info" htmlFor="btnradio3">AST</label>
                 </div> 
+                
                 <br></br>
                 <br></br>
                 {this.state.noReporte===1 &&
-                    <TablaErrores></TablaErrores>
+                    <TablaErrores listaErrores={this.state.errores}></TablaErrores>
                 }   
                 {this.state.noReporte=== 2 &&
-                    <TablaSimbolos></TablaSimbolos>
+                    <TablaSimbolos listaSimbolos={this.state.tabla}></TablaSimbolos>
                 }  
-                {this.state.noReporte===3 && 
-                    <div>
-                        <h2>Gerardo hijo de puta</h2>
-                        <div className="card" style={{width: "18rem"}}>
-                          <img src="https://scontent.fgua3-2.fna.fbcdn.net/v/t1.18169-9/1385193_523307391084915_997128073_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=ba80b0&_nc_ohc=ZQ9IUO6vbw4AX8kF7jd&_nc_ht=scontent.fgua3-2.fna&oh=5d7b547aba81e2f97eaf9f667a1ff0ce&oe=61449C0E" className="card-img-top" alt=""></img>
-                          <div className="card-body">
-                            <h5 className="card-title">Card title</h5>
-                          </div>
-                        </div>
-                    </div>
-                }  
-                <br></br>       
+                 
+                <br></br>
+                <button type="button" className="btn btn-outline-secondary" onClick={()=>this.getData()}>Actualizar</button>       
             </div>
         );
     }

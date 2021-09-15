@@ -2,35 +2,48 @@ import React  from "react";
 
 export class TablaErrores extends React.Component{
 
+  state={
+    error:[]
+  }
+
+  componentDidMount = () => {
+    //console.log(this.props.listaErrores)
+    var aux=[]
+    var i=1
+    this.props.listaErrores.forEach(element => {
+      element["num"] = i
+      i++
+      aux.push(element)
+    });
+    this.setState({error:aux})
+    if (aux.length===0){
+      alert('lista errores vacia')
+    }
+  }
+
     render(){
         return(
             <div className="resultados">
           <table className="table table-striped table-hover table-light">
           <thead>
             <tr>
-            <th scope="col">##</th>
-              <th scope="col">Jugador</th>
-              <th scope="col">Tier</th>
-              <th scope="col">P 10</th>
-              <th scope="col">P 5</th>
-              <th scope="col">P 3</th>
-              <th scope="col">P 0</th>
-              <th scope="col"> Total</th>
-              <th scope="col">Incremento</th>
+            <th scope="col">No.</th>
+              <th scope="col">Fila</th>
+              <th scope="col">Columna</th>
+              <th scope="col">fecha</th>
+              <th scope="col">Descripcion</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-            </tr>
+          <tbody style={{textAlign:'left'}}>
+            {this.state.error.map(
+              element => <tr key={element.num}>
+                          <td>{element.num}</td>                                        
+                          <td>{element.lin}</td>                                        
+                          <td>{element.col}</td>                          
+                          <td>{element.fecha}</td>                          
+                          <td>{element.desc}</td>                          
+                        </tr>
+            )}
           </tbody>
           </table>
         </div> 

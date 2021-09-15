@@ -1,6 +1,6 @@
 from clases.nodo import Nodo
 from clases.error import Error
-from analizadores.gramatica import parser
+from analizadores.gramatica import compilar
 from analizadores.gramaticaArbol import parser2
 from clases.enviroment.enviroment import Enviroment
 from analizadores.lexer import errores,listaStructs
@@ -40,12 +40,12 @@ def tablaToJson(obj):
 
 def analizarEntrada(contenido=None):
     try:
-        #arbol:Nodo= parser2.parse(contenido)
+        arbol:Nodo= parser2.parse(contenido)
         global errores,listaStructs
         errores.clear()
         listaStructs.clear()
         listaStructs.clear()
-        ast = parser.parse(contenido)
+        ast = compilar(contenido)
         gl = Enviroment(None,"Global")
         try:
             for instruccion in ast:
@@ -57,14 +57,15 @@ def analizarEntrada(contenido=None):
             return Regreso(False,str(e),"","","")
         listJson = objToJson(errores)
         tablaSimbolos = tablaToJson(gl.listaSimbolos)
-        #return Regreso(True,gl.consola,arbol.getGrafico(),listJson,tablaSimbolos)
+        abr = arbol.getGrafico()
+        return Regreso(True,gl.consola,abr,listJson,tablaSimbolos)
     except Exception as e:
         return Regreso(False,str(e),"","","")
-f = open('entrada.txt',encoding="UTF-8")
-contenido = f.read()
+#f = open('entrada.txt',encoding="UTF-8")
+#contenido = f.read()
 #ast = parser.parse(contenido)
 #gl = Enviroment(None,"Global")
-arbol:Nodo = parser2.parse(contenido)
+#arbol:Nodo = parser2.parse(contenido)
 
 #try:
 #    for instruccion in ast:
@@ -74,16 +75,19 @@ arbol:Nodo = parser2.parse(contenido)
 #    gl.addVariable_TablaSimbolos()
 #except:
 #    print("Error al ejecutar instrucciones")
-#s=analizarEntrada(contenido)
 #f.close()
+#s=analizarEntrada(contenido)
+#s=3
+#s=analizarEntrada(contenido)
+#s=2
 #print(gl.consola)
 #for var in gl.listaSimbolos:
 #    var = gl.listaSimbolos[var]
 #    print(var.ambito+" - "+var.nombre+" - "+var.tipo+" - "+var.valor)
 #print(arbol.getGrafico())
-f = open ('pruebas\salida.txt','w')
-f.write(arbol.getGrafico())
-f.close()
+#f = open ('pruebas\salida.txt','w')
+#f.write(arbol.getGrafico())
+#f.close()
 #for var in gl.variables:
     #    aux:Simbolo = gl.findVariable(var)
     #    print(str(aux.simbolId)+" "+str(aux.valor)+" "+str(aux.tipo))

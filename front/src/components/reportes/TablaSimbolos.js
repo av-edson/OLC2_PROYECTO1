@@ -1,6 +1,24 @@
 import React  from "react";
 
 export class TablaSimbolos extends React.Component{
+  state={
+    simbolos:[]
+  }
+
+  componentDidMount = () => {
+    //console.log(this.props.listaErrores)
+    var aux=[]
+    var i=1
+    this.props.listaSimbolos.forEach(element => {
+      element["num"] = i
+      i++
+      aux.push(element)
+    });
+    this.setState({simbolos:aux})
+    if (aux.length===0){
+      alert('lista simbolos vacia')
+    }
+  }
 
     render(){
         return(
@@ -8,29 +26,28 @@ export class TablaSimbolos extends React.Component{
           <table className="table table-striped table-hover table-light">
           <thead>
             <tr>
-            <th scope="col">##</th>
-              <th scope="col">Jugador</th>
-              <th scope="col">Tier</th>
-              <th scope="col">P 10</th>
-              <th scope="col">P 5</th>
-              <th scope="col">P 3</th>
-              <th scope="col">P 0</th>
-              <th scope="col"> Total</th>
-              <th scope="col">Incremento</th>
+            <th scope="col">No.</th>
+              <th scope="col">Fila</th>
+              <th scope="col">Columna</th>
+              <th scope="col">Ambito</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Valor</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-              <td >...</td>
-            </tr>
+          <tbody style={{textAlign:'left'}}>
+            {this.state.simbolos.map(
+              element =>
+              <tr key={element.num}>
+                <td >{element.num}</td>
+                <td >{element.fila}</td>
+                <td >{element.columna}</td>
+                <td >{element.ambito}</td>
+                <td >{element.nombre}</td>
+                <td >{element.tipo}</td>
+                <td >{element.valor}</td>
+              </tr>
+            )}
           </tbody>
           </table>
         </div> 

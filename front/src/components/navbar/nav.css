@@ -25,3 +25,10 @@ button{
   height: 500px;
   text-align: left;
 }
+#cargando{
+    text-align: center;
+}
+.ast{
+    min-width:  900px;
+    min-height: 700px;
+}

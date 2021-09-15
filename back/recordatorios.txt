@@ -11,6 +11,8 @@ archivo basico.jl:
 recursivas.jl:
     falta ";" linea 5
 ----------------------------Structs ---------------------------------
+archivo structs.jl de ejemplos:
+    falta ";" linea 22,21
 -------------------------- Arreglos --------------------------------
 archivo unadim.jl:
     declaracion tiene que ser "ID = Expresión :: TIPO;" linea 2
@@ -18,5 +20,5 @@ archivo unadim.jl:
 archivo dosdim.jl
     falta ";" en linea 57 y 71
 archivo tresdim.jl:
-    falta ";" en linea 40
+    falta ";" en linea 40 y 44
 --------------------------------------------------------------------

@@ -474,4 +474,8 @@ def p_modificar_arreglo(t):
 
 
 import ply.yacc as yacc
-parser = yacc.yacc()
+
+def compilar(contenido):
+    nuevoLexer()
+    parser = yacc.yacc()
+    return parser.parse(contenido)
