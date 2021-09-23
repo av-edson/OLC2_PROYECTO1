@@ -1,13 +1,13 @@
 import React from "react";
 import { TablaErrores } from "../reportes/TablaErrores";
 import { TablaSimbolos } from "../reportes/TablaSimbolos";
-//import { Ast } from "../reportes/ast";
+import { Ast } from "../reportes/ast";
 
 export class Resports extends React.Component{
 
 
     state={
-        dot:'igraph {a -> b;c;  d -> c;  a -> d;}',
+        dot:'',
         tabla:{},
         errores:{},
         mensajeRetorno:'Ninguna accion realizada'
@@ -18,7 +18,7 @@ export class Resports extends React.Component{
       };
     
     getData = () => {
-        this.setState({dot:'igraph {a -> b;c;  d -> c;  a -> d;}',
+        this.setState({dot:'',
         tabla:[],
         errores:[],
         mensajeRetorno:'Ninguna accion realizada'})
@@ -74,7 +74,10 @@ export class Resports extends React.Component{
                 }   
                 {this.state.noReporte=== 2 &&
                     <TablaSimbolos listaSimbolos={this.state.tabla}></TablaSimbolos>
-                }  
+                } 
+                {this.state.noReporte===3 &&
+                    <Ast arbol={this.state.dot}></Ast>
+                }
                  
                 <br></br>
                 <button type="button" className="btn btn-outline-secondary" onClick={()=>this.getData()}>Actualizar</button>       
